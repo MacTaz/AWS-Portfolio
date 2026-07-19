@@ -19,7 +19,7 @@ function Sidebar() {
           </div>
     
          <SocialLinks />
-        </div>
+    </div>
   );
 }
 export default Sidebar;

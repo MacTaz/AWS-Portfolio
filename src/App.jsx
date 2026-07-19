@@ -10,9 +10,7 @@ function App() {
     {/*Left - Right Layout*/}
     
       <Sidebar />
-
-
-
+      
       <div className="flex w-2/3 flex-col ml-20 mt-20">
         {/*Right Side*/}
 
