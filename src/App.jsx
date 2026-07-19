@@ -17,9 +17,9 @@ function App() {
       <div className="flex w-1/3 flex-col ml-20 mt-20"> 
       {/*LEFT SIDE*/}
 
-        <div className="flex flex-col items-left justify-center">
+        <div className="flex flex-col items-start justify-center">
           {/* NAME HEADER */}
-          <p class="font-inter text-2xl font-bold">Mico Tazarte</p>
+          <p className="font-inter text-2xl font-bold">Mico Tazarte</p>
         </div>
 
       <div className="flex flex-col mt-10 mr-60 justify-self-center">
@@ -73,7 +73,7 @@ function App() {
             {/* Project Image */}
           </div>
 
-          <div className="flex flex-row items-center justify-center">=
+          <div className="flex flex-row items-center justify-center">
             <div className="flex flex-col items-center justify-center"> 
               {/*Project Description & Title */}
               <p className=" flex font-inter">Project</p>
