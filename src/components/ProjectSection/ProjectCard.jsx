@@ -1,16 +1,16 @@
-function ProjectCard({ title, description, image, imgClass }) {
+function ProjectCard({ title, description, image, imageClass }) {
   return (
-    <div className="flex flex-row items-center justify-center">
-        <div className="flex flex-col items-center justify-center"> 
-            {/*Project Description & Title */}
-            <p className=" flex font-inter text-left">
+    <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+        <div className="flex flex-col items-center md:items-start justify-center">
+            {/* Project Title & Description */}
+            <p className="font-inter text-xl font-bold text-left">
                 {title}
             </p>
             <p>
                 {description}
             </p>
         </div>
-        <img src={image} alt="Project Image" className={`w-150 h-100 m-20 ${imgClass}`} />
+        <img src={image} alt={title} className={imageClass} />
         {/* Project Image */}
     </div>
   );
