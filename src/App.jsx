@@ -6,11 +6,11 @@ import ProjectSection from '@/components/ProjectSection/ProjectSection.jsx'
 function App() {
 
   return (
-    <div className="flex flex-col md:flex-row w-screen md:h-screen font-sans">    
+    <div className="flex flex-col md:flex-row w-screen md:h-screen font-sans">
       <Sidebar />
       <ProjectSection />
-      
-  </div>
+
+    </div>
   )
 }
 
