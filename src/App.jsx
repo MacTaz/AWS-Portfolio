@@ -9,8 +9,8 @@ function App() {
     <div className="flex flex-col md:flex-row w-full md:h-screen font-sans">    
       <Sidebar />
       <ProjectSection />
-      
-  </div>
+
+    </div>
   )
 }
 
