@@ -2,13 +2,19 @@ import SocialLinks from './SocialLinks';
 
 function Sidebar() {
   return (
-    <div className="flex flex-col max-w-2xl mt-5 ml-5">
-      <p className="font-inter text-2xl font-bold ">Mico Tazarte</p>
-      <p max-w-65ch >Lorem ipsum dolor sit amet, ...orem ipsum dolor sit amet, ...orem ipsum dolor sit amet,
-        ...orem ipsum dolor sit amet, ...orem ipsum dolor sit amet, ...orem ipsum dolor sit amet,
-        ...orem ipsum dolor sit amet, ...orem ipsum dolor sit amet, ...orem ipsum dolor sit amet,
-        ...orem ipsum dolor sit amet, ...orem ipsum dolor sit amet, ...orem ipsum dolor sit amet, ...</p>
-      <div className="mt-8 -ml-20 md:ml-0 md:mt-70 md:items-start">
+    <div className="flex flex-col items-center md:items-start justify-start gap-16 md:gap-12 h-auto md:h-full w-full md:w-[35%] px-6 md:px-6 lg:px-12 xl:px-20 pt-16 pb-8 md:pt-15 md:pb-0 overflow-hidden">
+      <p className="font-inter text-2xl font-bold text-center md:text-left">Mico Tazarte</p>
+
+      <div className="max-w-[65ch] text-center md:text-left">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+
+      <div className="mt-8 md:mt-auto md:mb-16">
         <SocialLinks />
       </div>
     </div>
