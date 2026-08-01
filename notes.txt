@@ -1,2 +1,19 @@
 resources:
 https://www.jyang.io/
+
+TODO:
+1.make the images for projects a video, turn images into videos
+2. add hovering effect on the background similar to the reference website (link above)
+
+PROJECTS SECTION:
+first project: repurpose
+second project: game video of survival ()
+third project: cloud resume project (video of going through the website)
+
+EDUCATION:
+Letran SHS
+Mapua College
+
+EXPERIENCE:
+MGC Vice President
+Hackathon

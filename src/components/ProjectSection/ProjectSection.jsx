@@ -3,12 +3,12 @@ import ProjectCard from "@/components/ProjectSection/ProjectCard";
 import projectimage from "@/assets/sampleimage.png";
 
 const projects = [
-  { title: "Project 1", description: "Description for Project 1", image: projectimage, imageClass: "max-w-[500px] aspect-[4/2] object-cover" },
-  { title: "Project 2", description: "Description for Project 2", image: projectimage, imageClass: "max-w-[500px] aspect-[4/2] object-cover" },
-  { title: "Project 3", description: "Description for Project 3", image: projectimage, imageClass: "max-w-[500px] aspect-[4/2] object-cover" },
-  { title: "Project 4", description: "Description for Project 4", image: projectimage, imageClass: "max-w-[500px] aspect-[4/2] object-cover" },
-  { title: "Project 5", description: "Description for Project 5", image: projectimage, imageClass: "max-w-[500px] aspect-[4/2] object-cover" },
-  { title: "Project 6", description: "Description for Project 6", image: projectimage, imageClass: "max-w-[500px] aspect-[4/2] object-cover" },
+  { title: "RePurpose", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", image: projectimage, imageClass: "w-120", githubUrl: "https://github.com/", date: "2024" },
+  { title: "RePurpose", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", image: projectimage, imageClass: "w-120", githubUrl: "https://github.com/", date: "2024" },
+  { title: "RePurpose", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", image: projectimage, imageClass: "w-120", githubUrl: "https://github.com/", date: "2024" },
+  { title: "RePurpose", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", image: projectimage, imageClass: "w-120", githubUrl: "https://github.com/", date: "2024" },
+  { title: "RePurpose", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", image: projectimage, imageClass: "w-120", githubUrl: "https://github.com/", date: "2024" },
+  { title: "RePurpose", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", image: projectimage, imageClass: "w-120", githubUrl: "https://github.com/", date: "2024" },
 ];
 
 const education = [
@@ -69,7 +69,7 @@ function ProjectSection() {
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto px-6 md:px-12 lg:px-20 pb-10">
         <div
-          className="flex flex-col gap-10 pt-10"
+          className="flex flex-col gap-16 pt-10"
           style={{
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(8px)",

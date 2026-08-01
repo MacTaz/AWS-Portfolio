@@ -3,3 +3,11 @@
 @theme {
   --font-inter: "Inter", sans-serif;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  scroll-behavior: smooth;
+}
