@@ -67,7 +67,7 @@ function ProjectSection() {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-6 md:px-12 lg:px-20 pb-10">
+      <div className="flex-1 overflow-y-auto px-6 md:px-12 lg:px-20 pb-10 @container">
         <div
           className="flex flex-col gap-16 pt-10"
           style={{
