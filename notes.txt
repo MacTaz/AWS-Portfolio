@@ -2,13 +2,19 @@ resources:
 https://www.jyang.io/
 
 TODO:
-1.make the images for projects a video, turn images into videos
-2. add hovering effect on the background similar to the reference website (link above)
+1.make the images for projects a video, turn images into videos DONE
+2. add hovering effect on the background similar to the reference website (link above) DONE
+3. Make a design for education side and experience side
+4. add fade transition into the repurpose video
+5. make a description for profile
+6. make a git actions (ci/cd pipeline)
 
 PROJECTS SECTION:
-first project: repurpose
-second project: game video of survival ()
-third project: cloud resume project (video of going through the website)
+first project: repurpose DONE
+second project: lost. () DONE
+third project: tagu taguan
+third project: cloud resume project (video of going through the website) DONE
+fourth project: data science project
 
 EDUCATION:
 Letran SHS
