@@ -1,4 +1,4 @@
-function ProjectCard({ title, description, image, imageClass, githubUrl, date }) {
+function ProjectCard({ title, description, video, image, imageClass, githubUrl, date }) {
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-5 md:gap-10 lg:gap-20 w-full">
       <div className="flex flex-col items-center md:items-start justify-center flex-1">
@@ -27,7 +27,18 @@ function ProjectCard({ title, description, image, imageClass, githubUrl, date })
       {/* Project Image + Date */}
       <div className="flex flex-col flex-shrink-0">
         <div className={`${imageClass} aspect-square overflow-hidden`}>
-          <img src={image} alt={title} className="w-full h-full object-cover" />
+          {video ? (
+            <video
+              src={video}
+              className="w-full h-full object-cover"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          ) : (
+            <img src={image} alt={title} className="w-full h-full object-cover" />
+          )}
         </div>
         {date && (
           <p className="text-xs text-gray-400 text-right mt-1">{date}</p>
