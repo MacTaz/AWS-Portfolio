@@ -6,12 +6,9 @@ function Sidebar() {
       <p className="font-inter text-2xl font-bold text-center md:text-left">Mico Tazarte</p>
       <p className="font-inter text-xl font-bold text-center md:text-left text-gray-500 md:-mt-32">Mapúa University</p>
 
-      <div className="max-w-[30ch] text-center md:text-left">
+      <div className="max-w-[25ch] text-center md:text-left">
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          I'm a computer science student specializing in data science, with a strong interest in cloud computing and a creative outlet in game development. I bring leadership experience from my involvement in student organizations, along with hands-on experience from participating in AI hackathons. Explore this site for a closer look at my background, projects, and experience as I work toward a career in the field.
         </p>
       </div>
 
