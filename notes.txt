@@ -4,20 +4,23 @@ https://www.jyang.io/
 TODO:
 1.make the images for projects a video, turn images into videos DONE
 2. add hovering effect on the background similar to the reference website (link above) DONE
-3. Make a design for education side and experience side
-4. add fade transition into the repurpose video
-5. make a description for profile
+3. Make a design for education side and experience side (SEMI DONE)
+4. add fade transition into the repurpose video (DONE)
+5. make a description for profile DONE
 6. make a git actions (ci/cd pipeline)
+7. add images for use in education and experience sections
+8. check for responsiveness
+9. add data science project
 
 PROJECTS SECTION:
 first project: repurpose DONE
 second project: lost. () DONE
-third project: tagu taguan
+third project: tagu taguan DONE
 third project: cloud resume project (video of going through the website) DONE
-fourth project: data science project
+fourth project: data science
 
 EDUCATION:
-Letran SHS
+Letran SHS DONE
 Mapua College
 
 EXPERIENCE:
