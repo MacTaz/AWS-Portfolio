@@ -12,13 +12,57 @@ const projects = [
 ];
 
 const education = [
-  { title: "Bachelor of Science in Computer Science", description: "University · 2020 – 2024" },
-  { title: "High School Diploma", description: "Senior High School · 2018 – 2020" },
+  {
+    title: "Bachelor of Computer Science",
+    subtitle: "Data Science Specialization | Mapua University",
+    date: "2024 – Ongoing",
+    bullets: [
+      "Dean Lister across multiple terms with a strong and sustained GWA.",
+      "DOST S&T Undergraduate Scholarship, Recipient of the DOST Scholarship.",
+      "Relevant Coursework: Data Structures & Algorithms, Discrete Mathematics, Data Science, Software Engineering, Operating Systems, Data Communication & Networking, Computer Architecture, Quantitative Methods, Automata Theory."
+    ],
+    video: lost_vid,
+    imageClass: "w-120"
+  },
+  {
+    title: "Colegio De San Juan De Letran",
+    subtitle: "Senior High School",
+    bullets: [
+      "Graduated with High Honors.",
+      "Winning Best Research."
+    ],
+    video: lost_vid,
+    imageClass: "w-120"
+  },
 ];
 
 const experience = [
-  { title: "Frontend Developer", description: "Company A · 2024 – Present" },
-  { title: "Game Developer Intern", description: "Studio B · 2023" },
+  {
+    title: "Internal Vice President",
+    subtitle: "Student Organization",
+    description: "Led team meetings, events, and internal communications; demonstrated strong collaboration and organizational skills.",
+    media: [
+      { video: lost_vid },
+      { video: repurpose_vid },
+      { video: taguan_vid },
+    ],
+    stacked: true
+  },
+  {
+    title: "Converge Byte Forward Hackathon",
+    subtitle: "National Hackathon | API, Database, and AI-focused",
+    date: "August 2025",
+    bullets: [
+      "Developed SangAI, a web-based AI learning platform to improve digital literacy and export readiness of Philippine MSMEs through real-time AI guidance and localized mentorship.",
+      "Integrated Converge AI APIs to deliver adaptive problem simulations that enhance user progression and confidence in digital skills."
+    ],
+    media: [
+      { video: repurpose_vid },
+      { video: lost_vid },
+      { video: taguan_vid },
+    ],
+    stacked: true
+  },
 ];
 
 const TABS = [
@@ -76,14 +120,7 @@ function ProjectSection() {
             transition: "opacity 0.5s ease, transform 0.5s ease",
           }}
         >
-          {activeTab === "projects"
-            ? items.map((project, i) => <ProjectCard key={i} {...project} />)
-            : items.map((item, i) => (
-              <div key={i} className="flex flex-col gap-1 py-4 border-b border-gray-200 last:border-b-0">
-                <p className="font-inter text-lg font-bold">{item.title}</p>
-                <p className="text-sm text-gray-500">{item.description}</p>
-              </div>
-            ))}
+          {items.map((item, i) => <ProjectCard key={i} {...item} />)}
         </div>
       </div>
     </div>

@@ -1,31 +1,52 @@
-function ProjectCard({ title, description, video, image, imageClass, githubUrl, date }) {
+import MediaSlider from "@/components/ProjectSection/MediaSlider";
+
+function ProjectCard({ title, subtitle, description, bullets, media, video, image, imageClass, githubUrl, date, stacked }) {
   return (
-    <div className="flex flex-col @[700px]:flex-row items-center justify-between gap-5 @[700px]:gap-16 w-full">
-      {/* Left: Title, Description, Date */}
-      <div className="flex flex-col items-center @[700px]:items-start justify-center flex-1 w-full">
-        <p className="font-inter text-xl font-bold text-center @[700px]:text-left w-full">
+    <div className={`flex flex-col ${stacked ? "" : "@[700px]:flex-row"} items-center justify-between gap-5 ${stacked ? "" : "@[700px]:gap-16"} w-full`}>
+      {/* Text: Title, Subtitle, Description, Bullets */}
+      <div className={`flex flex-col items-center ${stacked ? "items-start" : "@[700px]:items-start"} justify-center flex-1 w-full`}>
+        <p className={`font-inter text-xl font-bold ${stacked ? "text-left" : "text-center @[700px]:text-left"} w-full`}>
           {title}
         </p>
-        <p className="w-full text-justify mt-2">
-          {description}
-        </p>
+        {subtitle && (
+          <p className={`font-inter text-sm font-semibold text-gray-500 ${stacked ? "text-left" : "text-center @[700px]:text-left"} w-full mt-0.5`}>
+            {subtitle}
+          </p>
+        )}
+        {description && (
+          <p className="w-full text-justify mt-2">
+            {description}
+          </p>
+        )}
+        {bullets && bullets.length > 0 && (
+          <ul className="w-full mt-2 list-disc list-inside space-y-1">
+            {bullets.map((b, idx) => (
+              <li key={idx} className="text-sm text-justify leading-relaxed">{b}</li>
+            ))}
+          </ul>
+        )}
       </div>
-      {/* Right: Image + GitHub Link */}
-      <div className="flex flex-col flex-shrink-0">
-        <div className={`${imageClass} aspect-square overflow-hidden`}>
-          {video ? (
-            <video
-              src={video}
-              className="w-full h-full object-cover"
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-          ) : (
-            <img src={image} alt={title} className="w-full h-full object-cover" />
-          )}
-        </div>
+
+      {/* Media: slider (when media[]) or single video/image */}
+      <div className={`flex flex-col ${stacked ? "w-full" : "flex-shrink-0"}`}>
+        {media && media.length > 0 ? (
+          <MediaSlider media={media} aspectClass={stacked ? "aspect-video" : `${imageClass} aspect-square`} />
+        ) : (
+          <div className={`${stacked ? "w-full aspect-video" : `${imageClass} aspect-square`} overflow-hidden`}>
+            {video ? (
+              <video
+                src={video}
+                className="w-full h-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            ) : image ? (
+              <img src={image} alt={title} className="w-full h-full object-cover" />
+            ) : null}
+          </div>
+        )}
         <div className="flex items-center justify-between mt-1">
           {date && (
             <p className="text-xs text-gray-400">{date}</p>
@@ -49,3 +70,4 @@ function ProjectCard({ title, description, video, image, imageClass, githubUrl, 
 }
 
 export default ProjectCard;
+

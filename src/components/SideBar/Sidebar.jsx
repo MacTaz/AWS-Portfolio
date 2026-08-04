@@ -4,7 +4,7 @@ function Sidebar() {
   return (
     <div className="flex flex-col items-center md:items-start justify-start gap-16 md:gap-33 h-auto md:h-full w-full md:w-[35%] px-6 md:px-6 lg:px-12 xl:px-20 pt-16 pb-8 md:pt-15 md:pb-0 overflow-hidden">
       <p className="font-inter text-2xl font-bold text-center md:text-left">Mico Tazarte</p>
-      <p className="font-inter text-xl font-bold text-center md:text-left text-gray-500 md:-mt-32">Mapúa University</p>
+      <p className="font-inter text-xl font-bold text-center md:text-left text-gray-500 -mt-15 md:-mt-32">Mapúa University</p>
 
       <div className="max-w-[25ch] text-center md:text-left">
         <p>

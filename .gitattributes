@@ -1,0 +1,26 @@
+# Auto-detect text files and normalize line endings to CRLF on checkout (Windows)
+* text=auto eol=crlf
+
+# Explicitly handle common web source files
+*.js   text eol=crlf
+*.jsx  text eol=crlf
+*.ts   text eol=crlf
+*.tsx  text eol=crlf
+*.css  text eol=crlf
+*.html text eol=crlf
+*.json text eol=crlf
+*.md   text eol=crlf
+
+# Keep binary files untouched
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.mp4  binary
+*.mp3  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.eot  binary
