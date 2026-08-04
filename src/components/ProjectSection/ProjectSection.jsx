@@ -5,9 +5,9 @@ import repurpose_vid from "@/assets/VIDEOS/repurpose_vid.mp4";
 import taguan_vid from "@/assets/VIDEOS/taguan_vid.mp4";
 
 const projects = [
-  { title: "lost.", description: "Lost is a first-person survival horror game inspired by classic psychological horror experiences, where players must explore a dark, unsettling environment while evading a relentless entity. Developed using Unity, the game emphasizes immersive atmosphere, environmental storytelling, and suspense-driven gameplay through AI-powered enemy behavior, dynamic lighting, and sound design to create a tense and engaging player experience.", video: lost_vid, imageClass: "w-120", githubUrl: "https://github.com/", date: "2024" },
-  { title: "RePurpose", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", video: repurpose_vid, imageClass: "w-120", githubUrl: "https://github.com/", date: "2024" },
-  { title: "Tagu-Taguan", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", video: taguan_vid, imageClass: "w-120", githubUrl: "https://github.com/", date: "2024" },
+  { title: "lost.", description: "Lost is a first-person survival horror game inspired by classic psychological horror experiences, where players must explore a dark, unsettling environment while evading a relentless entity. Developed using Unity, the game emphasizes immersive atmosphere, environmental storytelling, and suspense-driven gameplay through AI-powered enemy behavior, dynamic lighting, and sound design to create a tense and engaging player experience.", video: lost_vid, imageClass: "w-120", githubUrl: "https://github.com/", itchUrl: "https://itch.io/", date: "2024" },
+  { title: "RePurpose", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", video: repurpose_vid, imageClass: "w-120", githubUrl: "https://github.com/", vercelUrl: "https://vercel.com/", date: "2024" },
+  { title: "Tagu-Taguan", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", video: taguan_vid, imageClass: "w-120", githubUrl: "https://github.com/", itchUrl: "https://itch.io/", date: "2024" },
   { title: "Cloud Website", description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.", video: lost_vid, imageClass: "w-120", githubUrl: "https://github.com/", date: "2024" },
 ];
 
@@ -65,6 +65,107 @@ const experience = [
   },
 ];
 
+const skillCategories = [
+  {
+    category: "Languages",
+    items: ["JavaScript", "TypeScript", "Python", "Java", "C++", "C#", "SQL", "GDScript"],
+  },
+  {
+    category: "Frontend",
+    items: ["React", "HTML", "CSS", "Figma", "Wix"],
+  },
+  {
+    category: "Backend",
+    items: ["Node.js", "REST APIs", "Supabase"],
+  },
+  {
+    category: "Cloud",
+    items: ["AWS (S3, Lambda, IAM)", "Terraform", "GitHub Actions (CI/CD)", "Vercel", "Git", "Linux"],
+  },
+  {
+    category: "Data Science",
+    items: ["Pandas", "NumPy", "Scikit-learn", "TensorFlow", "PyTorch", "Jupyter Notebook", "Matplotlib", "Seaborn", "Tableau", "Power BI"],
+  },
+  {
+    category: "Other",
+    items: ["Excel", "Cisco Packet Tracer", "Godot"],
+  },
+];
+
+function SkillsSection() {
+  return (
+    <div
+      style={{
+        paddingTop: "2rem",
+        display: "flex",
+        flexDirection: "column",
+        gap: "1.5rem",
+      }}
+    >
+      <p
+        style={{
+          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+          fontSize: "1.5rem",
+          fontWeight: 700,
+          letterSpacing: "-0.01em",
+          marginBottom: "0.25rem",
+          textAlign: "center",
+        }}
+      >
+        Skills
+      </p>
+
+      {skillCategories.map((cat) => (
+        <div key={cat.category} style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          {/* Category label */}
+          <span
+            style={{
+              fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+              fontSize: "0.65rem",
+              fontWeight: 600,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "rgba(0,0,0,0.38)",
+            }}
+          >
+            {cat.category}
+          </span>
+
+          {/* Pill chips */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+            {cat.items.map((item) => (
+              <span
+                key={item}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+                  fontSize: "0.75rem",
+                  fontWeight: 500,
+                  color: "rgba(0,0,0,0.72)",
+                  background: "rgba(0,0,0,0.05)",
+                  border: "1px solid rgba(0,0,0,0.08)",
+                  borderRadius: "999px",
+                  padding: "0.25rem 0.75rem",
+                  letterSpacing: "0.01em",
+                  whiteSpace: "nowrap",
+                  backdropFilter: "blur(6px)",
+                  WebkitBackdropFilter: "blur(6px)",
+                  transition: "background 0.15s ease",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(0,0,0,0.1)"}
+                onMouseLeave={e => e.currentTarget.style.background = "rgba(0,0,0,0.05)"}
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const TABS = [
   { id: "projects", label: "Projects" },
   { id: "education", label: "Education" },
@@ -121,6 +222,7 @@ function ProjectSection() {
           }}
         >
           {items.map((item, i) => <ProjectCard key={i} {...item} />)}
+          {activeTab === "education" && <SkillsSection />}
         </div>
       </div>
     </div>
