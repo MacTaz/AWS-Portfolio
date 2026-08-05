@@ -1,8 +1,10 @@
 import { useState } from "react";
 import ProjectCard from "@/components/ProjectSection/ProjectCard";
+import CertificationsSlider from "@/components/ProjectSection/CertificationsSlider";
 import lost_vid from "@/assets/VIDEOS/lost_vid.mp4";
 import repurpose_vid from "@/assets/VIDEOS/repurpose_vid.mp4";
 import taguan_vid from "@/assets/VIDEOS/taguan_vid.mp4";
+import sampleimage from "@/assets/sampleimage.png";
 
 const projects = [
   { title: "lost.", description: "Lost is a first-person survival horror game inspired by classic psychological horror experiences, where players must explore a dark, unsettling environment while evading a relentless entity. Developed using Unity, the game emphasizes immersive atmosphere, environmental storytelling, and suspense-driven gameplay through AI-powered enemy behavior, dynamic lighting, and sound design to create a tense and engaging player experience.", video: lost_vid, imageClass: "w-120", githubUrl: "https://github.com/", itchUrl: "https://itch.io/", date: "2024" },
@@ -20,9 +22,7 @@ const education = [
       "Dean Lister across multiple terms with a strong and sustained GWA.",
       "DOST S&T Undergraduate Scholarship, Recipient of the DOST Scholarship.",
       "Relevant Coursework: Data Structures & Algorithms, Discrete Mathematics, Data Science, Software Engineering, Operating Systems, Data Communication & Networking, Computer Architecture, Quantitative Methods, Automata Theory."
-    ],
-    video: lost_vid,
-    imageClass: "w-120"
+    ]
   },
   {
     title: "Colegio De San Juan De Letran",
@@ -30,9 +30,28 @@ const education = [
     bullets: [
       "Graduated with High Honors.",
       "Winning Best Research."
-    ],
-    video: lost_vid,
-    imageClass: "w-120"
+    ]
+  },
+];
+
+const certifications = [
+  {
+    title: "AWS Certified Cloud Practitioner",
+    subtitle: "Amazon Web Services",
+    date: "2024",
+    image: sampleimage,
+  },
+  {
+    title: "DOST S&T Undergraduate Scholarship",
+    subtitle: "Department of Science and Technology",
+    date: "2024",
+    image: sampleimage,
+  },
+  {
+    title: "Converge Byte Forward Hackathon Certificate",
+    subtitle: "Converge ICT Solutions",
+    date: "2025",
+    image: sampleimage,
   },
 ];
 
@@ -91,6 +110,26 @@ const skillCategories = [
     items: ["Excel", "Cisco Packet Tracer", "Godot"],
   },
 ];
+
+function CertificationsSection() {
+  return (
+    <div className="flex flex-col gap-4 pt-4">
+      <p
+        style={{
+          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+          fontSize: "1.5rem",
+          fontWeight: 700,
+          letterSpacing: "-0.01em",
+          marginBottom: "0.25rem",
+          textAlign: "center",
+        }}
+      >
+        Certifications
+      </p>
+      <CertificationsSlider items={certifications} />
+    </div>
+  );
+}
 
 function SkillsSection() {
   return (
@@ -222,7 +261,12 @@ function ProjectSection() {
           }}
         >
           {items.map((item, i) => <ProjectCard key={i} {...item} />)}
-          {activeTab === "education" && <SkillsSection />}
+          {activeTab === "education" && (
+            <>
+              <CertificationsSection />
+              <SkillsSection />
+            </>
+          )}
         </div>
       </div>
     </div>

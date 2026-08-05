@@ -11,6 +11,7 @@ TODO:
 7. add images for use in education and experience sections
 8. check for responsiveness
 9. add data science project
+10. adjust educations part make a certifications part where its a slider of all certificates and accomplishments
 
 PROJECTS SECTION:
 first project: repurpose DONE
