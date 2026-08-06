@@ -2,16 +2,9 @@ resources:
 https://www.jyang.io/
 
 TODO:
-1.make the images for projects a video, turn images into videos DONE
-2. add hovering effect on the background similar to the reference website (link above) DONE
-3. Make a design for education side and experience side (SEMI DONE)
-4. add fade transition into the repurpose video (DONE)
-5. make a description for profile DONE
-6. make a git actions (ci/cd pipeline)
-7. add images for use in education and experience sections
-8. check for responsiveness
-9. add data science project
-10. adjust educations part make a certifications part where its a slider of all certificates and accomplishments
+6. add images for education and experience
+7. fix hovering text (luvsic) to be bigger, hovering background effect and better font.
+8. fix used font (use one with higher weight)
 
 PROJECTS SECTION:
 first project: repurpose DONE
@@ -25,5 +18,5 @@ Letran SHS DONE
 Mapua College
 
 EXPERIENCE:
-MGC Vice President
+MGC Vice President                  
 Hackathon
