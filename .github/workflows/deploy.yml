@@ -16,16 +16,16 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-        node-version: 22
+          node-version: 22
 
       - name: Install dependencies
-        run: npm Install
+        run: npm install
 
       - name: build
         run: npm run build
 
       - name: Upload build artifact
-        uses: actions/upoad-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist
@@ -55,6 +55,7 @@ jobs:
         run: aws s3 sync dist s3://mico-portfolio --delete
       
       - name: Invalidate CloudFront cache
-        run: aws cloudfront create-invalidation \
-          --distribution-id EQ1GGDBHFQ40L \
-          --paths "/*"
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id EQ1GGDBHFQ40L \
+            --paths "/*"
