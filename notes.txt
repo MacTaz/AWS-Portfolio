@@ -20,3 +20,7 @@ Mapua College
 EXPERIENCE:
 MGC Vice President                  
 Hackathon
+
+UI Changes:
+remove lengthy paragraph only make it title and video
+education make it university, skills then certifications 
