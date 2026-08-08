@@ -37,7 +37,7 @@ function MediaSlider({ media, aspectClass = "aspect-video" }) {
   return (
     <div className="w-full flex flex-col gap-2">
       {/* Row: left arrow · video · right arrow */}
-      <div className="flex items-stretch w-full rounded-lg overflow-hidden">
+      <div className="flex items-stretch w-full overflow-hidden">
         {total > 1 && (
           <ArrowBtn onClick={prev} label="Previous media">
             <svg width="13" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

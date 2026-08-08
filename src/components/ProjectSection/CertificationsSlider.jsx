@@ -36,7 +36,7 @@ function CertificationsSlider({ items }) {
   return (
     <div className="w-full flex flex-col gap-3">
       {/* Row: left arrow · certificate image container · right arrow */}
-      <div className="flex items-stretch w-full rounded-lg overflow-hidden border border-gray-100 shadow-sm">
+      <div className="flex items-stretch w-full overflow-hidden border border-gray-100 shadow-sm">
         {total > 1 && (
           <ArrowBtn onClick={prev} label="Previous certification">
             <svg width="13" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
