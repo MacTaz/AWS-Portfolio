@@ -62,6 +62,46 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
     }
   };
 
+  // Touch swipe handler for mobile
+  const touchStartYRef = useRef(null);
+  const touchStartXRef = useRef(null);
+
+  const handleTouchStart = (e) => {
+    if (e.touches && e.touches.length === 1) {
+      touchStartYRef.current = e.touches[0].clientY;
+      touchStartXRef.current = e.touches[0].clientX;
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartYRef.current === null || touchStartXRef.current === null) return;
+    if (!e.changedTouches || e.changedTouches.length === 0) return;
+
+    const endY = e.changedTouches[0].clientY;
+    const endX = e.changedTouches[0].clientX;
+
+    const deltaY = touchStartYRef.current - endY;
+    const deltaX = touchStartXRef.current - endX;
+
+    const SWIPE_THRESHOLD = 30; // Minimum px distance to trigger a swipe
+
+    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > SWIPE_THRESHOLD) {
+      if (deltaY > 0) {
+        nextProject();
+      } else {
+        prevProject();
+      }
+    }
+
+    touchStartYRef.current = null;
+    touchStartXRef.current = null;
+  };
+
+  const handleTouchCancel = () => {
+    touchStartYRef.current = null;
+    touchStartXRef.current = null;
+  };
+
   // Keyboard navigation & body scroll lock
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -92,8 +132,11 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
   return createPortal(
     <div
       onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchCancel}
       onClick={onClose}
-      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl overflow-hidden"
+      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl overflow-hidden touch-none"
     >
       {/* Full-screen sliding wrapper — blurred bg + modal card slide together as one unit */}
       <div
@@ -133,8 +176,8 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
             </svg>
           </button>
 
-          {/* Video / Media Area — responsive sizing */}
-          <div className="w-full flex-1 md:flex-initial aspect-video md:aspect-square md:w-auto md:h-full relative overflow-hidden flex-shrink min-h-[140px] md:min-w-[280px]">
+          {/* Video / Media Area — responsive flex sizing: fills available space by default, shrinks only if text requires more room */}
+          <div className="w-full flex-1 min-h-0 flex-shrink aspect-video md:aspect-square md:w-auto md:h-full relative overflow-hidden md:flex-initial md:min-w-[280px]">
             {currentProject.video ? (
               <video
                 key={`main-${currentIndex}-${currentProject.video}`}
@@ -154,15 +197,15 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
             ) : null}
           </div>
 
-          {/* Right Panel */}
-          <div className="w-full md:w-[320px] lg:w-[420px] flex-shrink-0 flex-1 md:flex-none h-auto md:h-full bg-black text-white p-4 md:p-6 lg:p-8 flex flex-col justify-between overflow-y-auto relative z-20 min-h-0">
-            <div className="flex flex-col gap-4">
+          {/* Right Panel — flex-shrink-0 so text gets its full needed height at standard font size */}
+          <div className="w-full md:w-[320px] lg:w-[420px] flex-shrink-0 md:flex-none h-auto md:h-full bg-black text-white p-4 md:p-6 lg:p-8 flex flex-col justify-between overflow-hidden relative z-20 min-h-0">
+            <div className="flex flex-col gap-3 md:gap-4">
               {/* Date top-left, no counter */}
               {currentProject.date && (
                 <span className="text-xs text-white/50 font-medium">{currentProject.date}</span>
               )}
 
-              <h2 className="font-inter text-2xl md:text-3xl font-bold text-white tracking-tight">
+              <h2 className="font-inter text-xl md:text-3xl font-bold text-white tracking-tight leading-tight">
                 {currentProject.title}
               </h2>
 
@@ -173,14 +216,14 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
               )}
 
               {currentProject.description && (
-                <p className="text-white/80 text-sm leading-relaxed text-justify mt-2">
+                <p className="text-white/80 text-sm leading-relaxed text-justify mt-1 md:mt-2">
                   {currentProject.description}
                 </p>
               )}
             </div>
 
             {/* Bottom Action Links & Scroll Indicator */}
-            <div className="mt-8 pt-6 border-t border-white/10 flex flex-col gap-4">
+            <div className="mt-4 pt-4 md:mt-8 md:pt-6 border-t border-white/10 flex flex-col gap-4 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   {currentProject.vercelUrl && (
