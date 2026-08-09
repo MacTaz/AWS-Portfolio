@@ -21,6 +21,7 @@ resource "aws_cloudfront_distribution" "portfolio" {
   tags = {
     Name = "mico-portfolio"
   }
+  aliases = ["micotazarte.dev", "www.micotazarte.dev"]
 
   origin {
     domain_name              = "mico-portfolio.s3.us-east-1.amazonaws.com"
@@ -51,7 +52,8 @@ resource "aws_cloudfront_distribution" "portfolio" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
-    minimum_protocol_version       = "TLSv1"
+    acm_certificate_arn      = "arn:aws:acm:us-east-1:575108955018:certificate/bc55f6bd-7bf4-4772-84f4-68851905589d"
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 }

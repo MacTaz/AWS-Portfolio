@@ -145,6 +145,7 @@ resource "aws_iam_user_policy_attachment" "github_actions_deploy_attach" {
   policy_arn = aws_iam_policy.github_actions_deploy_policy.arn
 }
 
+
 resource "aws_iam_policy" "mico_personal_cli_policy" {
   name = "mico-personal-cli-policy"
 
