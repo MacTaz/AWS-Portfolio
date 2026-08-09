@@ -1,7 +1,7 @@
 import './App.css'
 import { useEffect } from 'react'
 import Sidebar from '@/components/SideBar/Sidebar.jsx'
-import ProjectSection from '@/components/ProjectSection/ProjectSection.jsx'
+import ContentSection from '@/components/ContentSection/ContentSection.jsx'
 import BackgroundText from '@/components/BackgroundText/BackgroundText.jsx'
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
     <div className="relative flex flex-col md:flex-row w-full md:h-screen font-sans">
       <BackgroundText />
       <Sidebar />
-      <ProjectSection />
+      <ContentSection />
 
     </div>
   )

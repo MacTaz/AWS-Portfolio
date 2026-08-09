@@ -1,4 +1,4 @@
-import { skillCategories as defaultCategories } from "@/components/ProjectSection/projectData";
+import { skillCategories as defaultCategories } from "@/components/ContentSection/portfolioData";
 
 function SkillsSection({ categories = defaultCategories }) {
   return (

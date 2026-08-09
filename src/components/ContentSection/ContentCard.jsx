@@ -1,7 +1,7 @@
-import MediaSlider from "@/components/ProjectSection/MediaSlider";
+import MediaSlider from "@/components/ContentSection/MediaSlider";
 import itchio from "@/assets/itchio.svg";
 
-function ProjectCard({ title, subtitle, description, bullets, media, video, image, imageClass, githubUrl, vercelUrl, itchUrl, date, stacked, onMediaClick }) {
+function ContentCard({ title, subtitle, description, bullets, media, video, image, imageClass, githubUrl, vercelUrl, itchUrl, date, stacked, onMediaClick }) {
   const hasMedia = Boolean((media && media.length > 0) || video || image);
   const isMinimalMode = Boolean(onMediaClick) || (!description && (!bullets || bullets.length === 0));
 
@@ -174,4 +174,4 @@ function ProjectCard({ title, subtitle, description, bullets, media, video, imag
   );
 }
 
-export default ProjectCard;
+export default ContentCard;

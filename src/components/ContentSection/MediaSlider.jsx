@@ -5,7 +5,7 @@ function MediaSlider({ media, aspectClass = "aspect-video" }) {
   const [current, setCurrent] = useState(0);
   const [fading, setFading] = useState(false);
 
-  const total = media.length;
+  const total = media?.length || 0;
   if (total === 0) return null;
 
   const go = (index) => {

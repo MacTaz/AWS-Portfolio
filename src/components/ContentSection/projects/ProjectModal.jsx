@@ -89,7 +89,7 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
           </svg>
         </button>
 
-        {/* Video Player Centered (No black background box) */}
+        {/* Video Player Centered */}
         <div className="flex-1 flex items-center justify-center p-6 relative">
           <div className="w-full h-full max-w-3xl aspect-square md:aspect-video flex items-center justify-center overflow-hidden shadow-2xl">
             {currentProject.video ? (

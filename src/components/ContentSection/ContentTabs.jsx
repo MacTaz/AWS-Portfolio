@@ -1,6 +1,6 @@
-import { TABS as defaultTabs } from "@/components/ProjectSection/projectData";
+import { TABS as defaultTabs } from "@/components/ContentSection/portfolioData";
 
-function ProjectTabs({ tabs = defaultTabs, activeTab, onTabChange }) {
+function ContentTabs({ tabs = defaultTabs, activeTab, onTabChange }) {
   return (
     <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm px-6 md:px-12 lg:px-20 pt-16 md:pt-16 pb-4">
       <div className="flex items-center justify-center gap-6 flex-wrap w-full">
@@ -23,4 +23,4 @@ function ProjectTabs({ tabs = defaultTabs, activeTab, onTabChange }) {
   );
 }
 
-export default ProjectTabs;
+export default ContentTabs;

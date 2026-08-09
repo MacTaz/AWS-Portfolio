@@ -1,5 +1,5 @@
-import CertificationsSlider from "@/components/ProjectSection/CertificationsSlider";
-import { certifications as defaultCertifications } from "@/components/ProjectSection/projectData";
+import CertificationsSlider from "@/components/ContentSection/education/CertificationsSlider";
+import { certifications as defaultCertifications } from "@/components/ContentSection/portfolioData";
 
 function CertificationsSection({ items = defaultCertifications }) {
   return (
