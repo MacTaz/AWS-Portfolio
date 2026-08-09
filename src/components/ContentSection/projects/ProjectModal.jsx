@@ -155,7 +155,7 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
           </div>
 
           {/* Right Panel */}
-          <div className="w-full md:w-[320px] lg:w-[420px] flex-shrink-0 flex-1 md:flex-none h-auto md:h-full bg-black text-white p-4 md:p-6 lg:p-8 flex flex-col justify-between overflow-hidden relative z-20 min-h-0">
+          <div className="w-full md:w-[320px] lg:w-[420px] flex-shrink-0 flex-1 md:flex-none h-auto md:h-full bg-black text-white p-4 md:p-6 lg:p-8 flex flex-col justify-between overflow-y-auto relative z-20 min-h-0">
             <div className="flex flex-col gap-4">
               {/* Date top-left, no counter */}
               {currentProject.date && (
