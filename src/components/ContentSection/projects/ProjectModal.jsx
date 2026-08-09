@@ -6,8 +6,13 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [offset, setOffset] = useState(0);
   const [enableTransition, setEnableTransition] = useState(false);
+  const [bgOpacity, setBgOpacity] = useState(0.3);
   const total = projects?.length || 0;
   const isNavigatingRef = useRef(false);
+
+  const SLIDE_DURATION = 600; // ms
+  const BG_FADE_DURATION = 400; // ms — bg fades faster than slide
+  const EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
 
   useEffect(() => {
     setCurrentIndex(initialIndex);
@@ -17,30 +22,33 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
     if (isNavigatingRef.current || total === 0) return;
     isNavigatingRef.current = true;
 
+    // dir=1 → next (scroll down): exit upward, enter from below
     const exitOffset = dir === 1 ? -100 : 100;
     const enterOffset = dir === 1 ? 100 : -100;
 
-    // 1. Slide out current
+    // 1. Start: slide out + fade bg to black
     setEnableTransition(true);
     setOffset(exitOffset);
+    setBgOpacity(0);
 
     setTimeout(() => {
-      // 2. Instantly jump to enter position with new index (no transition)
+      // 2. Snap to opposite side with new content (no transition)
       setEnableTransition(false);
       setCurrentIndex((prev) => (prev + dir + total) % total);
       setOffset(enterOffset);
 
-      // 3. Slide in
+      // 3. Slide new content in + fade bg back in
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setEnableTransition(true);
           setOffset(0);
+          setBgOpacity(0.3);
           setTimeout(() => {
             isNavigatingRef.current = false;
-          }, 380);
+          }, SLIDE_DURATION);
         });
       });
-    }, 320);
+    }, SLIDE_DURATION);
   }, [total]);
 
   const nextProject = useCallback(() => navigate(1), [navigate]);
@@ -75,54 +83,58 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
 
   const currentProject = projects[currentIndex] || {};
 
+  // Applied to the whole modal card (video + text + close button all slide together)
   const slideStyle = {
     transform: `translateY(${offset}%)`,
-    transition: enableTransition ? "transform 0.32s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
+    transition: enableTransition ? `transform ${SLIDE_DURATION}ms ${EASE}` : "none",
   };
 
   return createPortal(
     <div
       onWheel={handleWheel}
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xl overflow-hidden"
+      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl overflow-hidden"
     >
-      {/* Blurred background video layer */}
-      {currentProject.video && (
-        <video
-          key={`bg-${currentIndex}-${currentProject.video}`}
-          src={currentProject.video}
-          className="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-30 scale-110 pointer-events-none"
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
-      )}
-
-      {/* Centered Modal Card Container */}
+      {/* Full-screen sliding wrapper — blurred bg + modal card slide together as one unit */}
       <div
-        onClick={(e) => e.stopPropagation()}
-        className="relative z-10 flex flex-col md:flex-row w-auto h-[82vh] max-h-[720px] overflow-hidden gap-6"
+        className="absolute inset-0 flex items-center justify-center"
+        style={slideStyle}
       >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-30 p-2 text-white/70 hover:text-white bg-black/60 hover:bg-black/90 transition-colors cursor-pointer border border-white/10"
-          aria-label="Close project view"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
+        {/* Blurred background video — no key so it never remounts mid-slide */}
+        {currentProject.video && (
+          <video
+            src={currentProject.video}
+            className="absolute inset-0 w-full h-full object-cover filter blur-3xl scale-110 pointer-events-none"
+            style={{
+              opacity: bgOpacity,
+              transition: `opacity ${BG_FADE_DURATION}ms ease`,
+            }}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        )}
 
-        {/* Animated content wrapper — both video and text slide together */}
+        {/* Modal Card */}
         <div
-          className="flex flex-row h-full gap-6"
-          style={slideStyle}
+          onClick={(e) => e.stopPropagation()}
+          className="relative z-10 flex flex-col md:flex-row mx-4 md:mx-6 lg:mx-0 w-[calc(100vw-2rem)] md:w-[92vw] lg:w-auto h-[85vh] md:h-[75vh] lg:h-[82vh] max-h-[720px] max-w-[1050px] overflow-hidden gap-3 md:gap-4 lg:gap-6"
         >
-          {/* Video / Media Main Area - square sized to container height */}
-          <div className="h-full aspect-square relative overflow-hidden flex-shrink-0">
+          {/* Close Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-30 p-2 text-white/70 hover:text-white bg-black/60 hover:bg-black/90 transition-colors cursor-pointer border border-white/10"
+            aria-label="Close project view"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+
+          {/* Video / Media Area — responsive sizing */}
+          <div className="w-full flex-1 md:flex-initial aspect-video md:aspect-square md:w-auto md:h-full relative overflow-hidden flex-shrink min-h-[140px] md:min-w-[280px]">
             {currentProject.video ? (
               <video
                 key={`main-${currentIndex}-${currentProject.video}`}
@@ -143,16 +155,12 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
           </div>
 
           {/* Right Panel */}
-          <div className="w-full md:w-[380px] lg:w-[420px] flex-shrink-0 h-full bg-black text-white p-6 md:p-8 flex flex-col justify-between overflow-y-auto relative z-20">
+          <div className="w-full md:w-[320px] lg:w-[420px] flex-shrink-0 flex-1 md:flex-none h-auto md:h-full bg-black text-white p-4 md:p-6 lg:p-8 flex flex-col justify-between overflow-hidden relative z-20 min-h-0">
             <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-white/50 font-mono tracking-wider uppercase">
-                  Project {currentIndex + 1} of {total}
-                </span>
-                {currentProject.date && (
-                  <span className="text-xs text-white/50 font-medium">{currentProject.date}</span>
-                )}
-              </div>
+              {/* Date top-left, no counter */}
+              {currentProject.date && (
+                <span className="text-xs text-white/50 font-medium">{currentProject.date}</span>
+              )}
 
               <h2 className="font-inter text-2xl md:text-3xl font-bold text-white tracking-tight">
                 {currentProject.title}
@@ -213,14 +221,6 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
                     </a>
                   )}
                 </div>
-
-                {/* Scroll Hint */}
-                <span className="text-[11px] text-white/40 font-mono flex items-center gap-1.5">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 5v14M19 12l-7 7-7-7" />
-                  </svg>
-                  Scroll to switch
-                </span>
               </div>
             </div>
           </div>
