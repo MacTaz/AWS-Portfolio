@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ContentCard from "@/components/ContentSection/ContentCard";
+import ProjectCard from "@/components/ContentSection/projects/ProjectCard";
 import ProjectModal from "@/components/ContentSection/projects/ProjectModal";
 import { projects } from "@/components/ContentSection/portfolioData";
 
@@ -15,7 +15,7 @@ function ProjectsTab() {
   return (
     <>
       {projects.map((item, i) => (
-        <ContentCard
+        <ProjectCard
           key={i}
           {...item}
           onMediaClick={() => handleOpenModal(i)}

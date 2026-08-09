@@ -1,4 +1,4 @@
-import ContentCard from "@/components/ContentSection/ContentCard";
+import EducationCard from "@/components/ContentSection/education/EducationCard";
 import CertificationsSection from "@/components/ContentSection/education/CertificationsSection";
 import SkillsSection from "@/components/ContentSection/education/SkillsSection";
 import { education } from "@/components/ContentSection/portfolioData";
@@ -7,7 +7,7 @@ function EducationTab() {
   return (
     <>
       {education.map((item, i) => (
-        <ContentCard key={i} {...item} />
+        <EducationCard key={i} {...item} />
       ))}
       <CertificationsSection />
       <SkillsSection />

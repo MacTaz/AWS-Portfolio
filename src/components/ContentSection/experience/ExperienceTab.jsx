@@ -1,11 +1,11 @@
-import ContentCard from "@/components/ContentSection/ContentCard";
+import ExperienceCard from "@/components/ContentSection/experience/ExperienceCard";
 import { experience } from "@/components/ContentSection/portfolioData";
 
 function ExperienceTab() {
   return (
     <>
       {experience.map((item, i) => (
-        <ContentCard key={i} {...item} />
+        <ExperienceCard key={i} {...item} />
       ))}
     </>
   );
