@@ -134,7 +134,7 @@ resource "aws_iam_policy" "github_actions_deploy_policy" {
       {
         Effect   = "Allow"
         Action   = ["cloudfront:CreateInvalidation"]
-        Resource = "*"
+        Resource = "arn:aws:cloudfront::575108955018:distribution/EQ1GGDBHFQ40L"
       }
     ]
   })
