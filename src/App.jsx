@@ -12,11 +12,12 @@ function App() {
   }, []);
 
   return (
-    <div className="relative flex flex-col md:flex-row w-full md:h-screen font-sans">
+    <div className="relative w-full min-h-screen md:h-screen font-sans bg-white overflow-x-clip">
       <BackgroundText />
-      <Sidebar />
-      <ContentSection />
-
+      <div className="relative z-10 flex flex-col md:flex-row w-full max-w-[1440px] md:h-screen mx-auto">
+        <Sidebar />
+        <ContentSection />
+      </div>
     </div>
   )
 }

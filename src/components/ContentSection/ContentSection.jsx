@@ -20,13 +20,13 @@ function ContentSection() {
 
   return (
     <div className="flex flex-col w-full md:w-[65%] md:h-screen">
-      {/* Sticky header navigation */}
-      <ContentTabs tabs={TABS} activeTab={activeTab} onTabChange={switchTab} />
-
       {/* Scrollable content container */}
-      <div className="flex-1 overflow-y-auto px-6 md:px-12 lg:px-20 pb-10 @container">
+      <div className="flex-1 md:overflow-y-auto no-scrollbar px-4 md:px-6 lg:px-8 pb-8 @container">
+        {/* Sticky header navigation */}
+        <ContentTabs tabs={TABS} activeTab={activeTab} onTabChange={switchTab} />
+
         <div
-          className="flex flex-col gap-16 pt-10"
+          className="flex flex-col gap-10 pt-4"
           style={{
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(8px)",
