@@ -59,7 +59,7 @@ function ProjectCard({
 
         {/* Center: Title & Subtitle */}
         <div className="flex-1 flex items-center justify-center gap-1.5 text-center">
-          <p className="font-inter text-lg font-semibold text-gray-900">{title}</p>
+          <p className="font-inter text-lg font-bold text-gray-900">{title}</p>
           {subtitle && <span className="font-inter text-xs font-medium text-gray-500">({subtitle})</span>}
         </div>
 
