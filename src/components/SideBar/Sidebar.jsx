@@ -2,7 +2,7 @@ import SocialLinks from './SocialLinks';
 
 function Sidebar() {
   return (
-    <div className="flex flex-col items-center md:items-start justify-start gap-8 md:gap-10 h-auto md:h-full w-full md:w-[35%] px-4 md:px-6 lg:px-8 pt-10 pb-6 md:pt-12 md:pb-0 overflow-hidden">
+    <div className="flex flex-col items-center md:items-start justify-start gap-8 md:gap-10 h-auto md:h-full w-full md:w-[35%] px-4 md:px-6 lg:px-8 pt-8 md:pt-10 pb-6 md:pb-0 overflow-hidden">
       <div>
         <p className="font-inter text-2xl font-bold text-center md:text-left">Mico Tazarte</p>
         <p className="font-inter text-xl font-bold text-center md:text-left text-gray-500 mt-1">Mapúa University</p>

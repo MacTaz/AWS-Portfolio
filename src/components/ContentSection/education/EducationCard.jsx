@@ -1,31 +1,36 @@
 function EducationCard({ title, subtitle, date, description, bullets }) {
   return (
-    <div className="flex flex-col items-start justify-center w-full gap-1.5">
+    <div className="w-full flex flex-col gap-3 bg-gray-50/60 p-6 border border-gray-200/80">
       <div className="flex items-baseline justify-between w-full flex-wrap gap-2">
-        <p className="font-inter text-lg font-semibold text-gray-900">{title}</p>
-        {date && <span className="text-xs text-gray-400 font-medium">{date}</span>}
+        <h3 className="font-inter text-xl font-bold text-gray-900">{title}</h3>
+        {date && (
+          <span className="text-sm font-semibold text-gray-500">
+            {date}
+          </span>
+        )}
       </div>
 
       {subtitle && (
-        <p className="font-inter text-sm font-medium text-gray-500">
+        <p className="font-inter text-base font-semibold text-gray-600">
           {subtitle}
         </p>
       )}
 
       {description && (
-        <p className="w-full text-justify text-sm text-gray-700 leading-relaxed mt-1">
+        <p className="leading-relaxed text-justify mt-1">
           {description}
         </p>
       )}
 
       {bullets && bullets.length > 0 && (
-        <ul className="w-full mt-1.5 list-disc list-inside space-y-1">
+        <div className="flex flex-col gap-2 mt-1">
           {bullets.map((b, idx) => (
-            <li key={idx} className="text-sm text-justify leading-relaxed text-gray-700">
-              {b}
-            </li>
+            <div key={idx} className="flex items-start gap-2">
+              <span className="text-gray-400 shrink-0">•</span>
+              <span className="leading-relaxed">{b}</span>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

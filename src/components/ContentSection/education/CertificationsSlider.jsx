@@ -46,7 +46,7 @@ function CertificationsSlider({ items }) {
         )}
 
         {/* Certificate Image Frame */}
-        <div className="flex-1 aspect-video overflow-hidden bg-black flex items-center justify-center">
+        <div className="flex-1 aspect-[4/3] overflow-hidden bg-black flex items-center justify-center">
           <div
             style={{
               opacity: fading ? 0 : 1,
@@ -85,24 +85,24 @@ function CertificationsSlider({ items }) {
       </div>
 
       {/* Certification details below the image */}
-      <div className="flex flex-col items-start gap-0.5 px-1">
+      <div className="flex flex-col items-start gap-1 px-1 pt-1">
         <div className="flex items-center justify-between w-full">
-          <p className="font-inter text-lg font-bold text-gray-900">
+          <p className="font-inter text-xl font-bold text-gray-900">
             {activeItem.title}
           </p>
           {activeItem.date && (
-            <span className="text-xs text-gray-400 font-medium">
+            <span className="text-sm text-gray-500 font-semibold">
               {activeItem.date}
             </span>
           )}
         </div>
         {activeItem.subtitle && (
-          <p className="font-inter text-sm font-semibold text-gray-500">
+          <p className="font-inter text-base font-semibold text-gray-600">
             {activeItem.subtitle}
           </p>
         )}
         {activeItem.description && (
-          <p className="text-sm text-gray-600 mt-1 leading-relaxed">
+          <p className="text-base font-medium text-gray-800 mt-1 leading-relaxed">
             {activeItem.description}
           </p>
         )}
@@ -117,10 +117,10 @@ function CertificationsSlider({ items }) {
               onClick={() => go(i)}
               aria-label={`Go to certification ${i + 1}`}
               className={[
-                "rounded-full transition-all duration-300 cursor-pointer border-0 p-0",
+                "transition-all duration-300 cursor-pointer border-0 p-0",
                 i === current
-                  ? "w-3.5 h-1.5 bg-gray-800"
-                  : "w-1.5 h-1.5 bg-gray-300 hover:bg-gray-500",
+                  ? "w-4 h-1 bg-gray-900"
+                  : "w-2 h-1 bg-gray-300 hover:bg-gray-500",
               ].join(" ")}
             />
           ))}

@@ -3,19 +3,10 @@ import { certifications as defaultCertifications } from "@/components/ContentSec
 
 function CertificationsSection({ items = defaultCertifications }) {
   return (
-    <div className="flex flex-col gap-4 pt-4">
-      <p
-        style={{
-          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
-          fontSize: "1.5rem",
-          fontWeight: 700,
-          letterSpacing: "-0.01em",
-          marginBottom: "0.25rem",
-          textAlign: "center",
-        }}
-      >
+    <div className="flex flex-col gap-4 pt-6 border-t border-gray-100 mt-2">
+      <h2 className="font-inter text-xl font-bold text-gray-900 tracking-tight">
         Certifications
-      </p>
+      </h2>
       <CertificationsSlider items={items} />
     </div>
   );
