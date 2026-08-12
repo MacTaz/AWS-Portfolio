@@ -17,7 +17,7 @@ function SkillsSection({ categories = defaultCategories }) {
               {cat.category}
             </span>
 
-            <p className="font-inter font-medium text-sm leading-relaxed text-gray-700">
+            <p className="font-inter font-medium text-sm leading-relaxed">
               {cat.items.join(" · ")}
             </p>
           </div>

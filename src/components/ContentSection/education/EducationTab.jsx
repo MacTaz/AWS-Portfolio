@@ -12,8 +12,8 @@ function EducationTab() {
         ))}
       </div>
 
-      <CertificationsSection />
       <SkillsSection />
+      <CertificationsSection />
     </div>
   );
 }
