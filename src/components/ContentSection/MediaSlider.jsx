@@ -22,85 +22,76 @@ function MediaSlider({ media, aspectClass = "aspect-video" }) {
 
   const item = media[current];
 
-  const ArrowBtn = ({ onClick, label, children }) => (
-    <button
-      onClick={onClick}
-      aria-label={label}
-      className="flex-shrink-0 flex items-center justify-center w-10 self-stretch bg-white hover:bg-gray-100 transition-colors duration-200 cursor-pointer border-0 group/arrow"
-    >
-      <span className="text-gray-400 group-hover/arrow:text-gray-800 transition-colors duration-200">
-        {children}
-      </span>
-    </button>
-  );
-
   return (
     <div className="w-full flex flex-col gap-2">
-      {/* Row: left arrow · video · right arrow */}
-      <div className="flex items-stretch w-full overflow-hidden">
-        {total > 1 && (
-          <ArrowBtn onClick={prev} label="Previous media">
-            <svg width="13" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </ArrowBtn>
-        )}
-
-        {/* Media frame — black bg so the fade goes dark, not white */}
-        <div className={`flex-1 ${aspectClass} overflow-hidden bg-black`}>
-          <div
-            style={{
-              opacity: fading ? 0 : 1,
-              transition: "opacity 0.25s ease",
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            {item.video ? (
-              <video
-                key={item.video}
-                src={item.video}
-                className="w-full h-full object-cover"
-                autoPlay
-                loop
-                muted
-                playsInline
-              />
-            ) : item.image ? (
-              <img
-                src={item.image}
-                alt={item.alt ?? "media"}
-                className="w-full h-full object-cover"
-              />
-            ) : null}
-          </div>
+      {/* Media frame */}
+      <div className={`w-full ${aspectClass} overflow-hidden bg-black relative`}>
+        <div
+          style={{
+            opacity: fading ? 0 : 1,
+            transition: "opacity 0.25s ease",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          {item.video ? (
+            <video
+              key={item.video}
+              src={item.video}
+              className="w-full h-full object-cover"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          ) : item.image ? (
+            <img
+              src={item.image}
+              alt={item.alt ?? "media"}
+              className="w-full h-full object-cover"
+            />
+          ) : null}
         </div>
-
-        {total > 1 && (
-          <ArrowBtn onClick={next} label="Next media">
-            <svg width="13" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </ArrowBtn>
-        )}
       </div>
 
-      {/* Dot indicators below */}
+      {/* Switcher under the image */}
       {total > 1 && (
-        <div className="flex items-center justify-center gap-1.5">
-          {media.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => go(i)}
-              aria-label={`Go to media ${i + 1}`}
-              className={[
-                "rounded-full transition-all duration-300 cursor-pointer border-0 p-0",
-                i === current
-                  ? "w-3.5 h-1.5 bg-gray-800"
-                  : "w-1.5 h-1.5 bg-gray-300 hover:bg-gray-500",
-              ].join(" ")}
-            />
-          ))}
+        <div className="flex items-center justify-center gap-3 py-1">
+          <button
+            onClick={prev}
+            aria-label="Previous media"
+            className="p-1 text-gray-400 hover:text-gray-900 transition-colors cursor-pointer border-0 bg-transparent flex items-center justify-center"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+
+          <div className="flex items-center gap-1.5">
+            {media.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => go(i)}
+                aria-label={`Go to media ${i + 1}`}
+                className={[
+                  "rounded-full transition-all duration-300 cursor-pointer border-0 p-0",
+                  i === current
+                    ? "w-4 h-1.5 bg-gray-800"
+                    : "w-1.5 h-1.5 bg-gray-300 hover:bg-gray-500",
+                ].join(" ")}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={next}
+            aria-label="Next media"
+            className="p-1 text-gray-400 hover:text-gray-900 transition-colors cursor-pointer border-0 bg-transparent flex items-center justify-center"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
         </div>
       )}
     </div>
