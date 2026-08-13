@@ -164,7 +164,12 @@ resource "aws_iam_policy" "mico_personal_cli_policy" {
           "logs:*",
           "iam:Get*",
           "iam:List*",
-          "iam:PassRole"
+          "iam:PassRole",
+          "iam:CreatePolicyVersion",
+          "iam:DeletePolicyVersion",
+          "iam:SetDefaultPolicyVersion",
+          "iam:GetPolicyVersion",
+          "iam:ListPolicyVersions"
         ]
         Resource = "*"
       }
