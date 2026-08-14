@@ -64,19 +64,12 @@ def lambda_handler(event, context):
     
     analytics_table.put_item(Item=summary_json)
 
-    analytics_table.put_item(Item=summary_json)
-
     # Dual-write: also store a dated snapshot for historical trend data
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     snapshot = dict(summary_json)
     snapshot['statId'] = f'summary#{today}'
     analytics_table.put_item(Item=snapshot)
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps(summary)
-    }
-    
     return {
         'statusCode': 200,
         'body': json.dumps(summary)
