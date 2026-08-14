@@ -78,10 +78,25 @@ export const certifications = [
 
 export const experience = [
   {
-    title: "Internal Vice President",
+    title: "Corporate Secretary - AWS-SBG Arcus",
+    subtitle: "Student Builder Group",
+    date: "August 2026 - Present",
+    bullets: [
+      "Developed SangAI, a web-based AI learning platform to improve digital literacy and export readiness of Philippine MSMEs through real-time AI guidance and localized mentorship.",
+      "Integrated Converge AI APIs to deliver adaptive problem simulations that enhance user progression and confidence in digital skills.",
+    ],
+    media: [
+      { video: repurpose_vid },
+      { video: lost_vid },
+      { video: taguan_vid },
+    ],
+    stacked: true,
+  },
+  {
+    title: "Internal Vice President - Mapua Game Consensus",
     subtitle: "Student Organization",
-    description:
-      "Led team meetings, events, and internal communications; demonstrated strong collaboration and organizational skills.",
+    date: "August 2024 - August 2025",
+    description: "Led team meetings, events, and internal communications; demonstrated strong collaboration and organizational skills.",
     media: [
       { video: lost_vid },
       { video: repurpose_vid },
