@@ -3,6 +3,8 @@ import { useEffect } from 'react'
 import Sidebar from '@/components/SideBar/Sidebar.jsx'
 import ContentSection from '@/components/ContentSection/ContentSection.jsx'
 import BackgroundText from '@/components/BackgroundText/BackgroundText.jsx'
+import AdminAnalyticsPanel from '@/components/admin/AdminAnalyticsPanel.jsx'
+import { AdminProvider } from '@/context/AdminContext.jsx'
 
 function App() {
   useEffect(() => {
@@ -12,14 +14,17 @@ function App() {
   }, []);
 
   return (
-    <div className="relative w-full min-h-screen md:h-screen font-sans bg-white overflow-x-clip">
-      <BackgroundText />
-      <div className="relative z-10 flex flex-col md:flex-row w-full max-w-[1440px] md:h-screen mx-auto">
-        <Sidebar />
-        <ContentSection />
+    <AdminProvider>
+      <div className="relative w-full min-h-screen md:h-screen font-sans bg-white overflow-x-clip">
+        <BackgroundText />
+        <div className="relative z-10 flex flex-col md:flex-row w-full max-w-[1440px] md:h-screen mx-auto">
+          <Sidebar />
+          <ContentSection />
+        </div>
+        <AdminAnalyticsPanel />
       </div>
-    </div>
+    </AdminProvider>
   )
 }
 
-export default App 
+export default App

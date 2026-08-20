@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Lock, ChevronDown, X } from "lucide-react";
+import { useAdmin } from "@/context/AdminContext.jsx";
 import {
   BarChart,
   Bar,
@@ -9,7 +10,6 @@ import {
 } from "recharts";
 
 // ---- Design tokens ----
-const ink = "#17151a";        // dark site background
 const panelBg = "#ffffff";
 const textPrimary = "#161217";
 const textMuted = "#a68f8a";  // muted rose-taupe (tabs, secondary labels)
@@ -535,34 +535,13 @@ function PasswordGate({ onSuccess, onCancel }) {
   );
 }
 
-export default function AdminAnalyticsMockup() {
-  const isMobile = useIsMobile();
-  const [showPassword, setShowPassword] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(false);
+export default function AdminAnalyticsPanel() {
+  const { showPassword, panelOpen, cancelPassword, onAuthSuccess, closePanel } = useAdmin();
 
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "Escape") {
-        setShowPassword(false);
-        setPanelOpen(false);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  if (!showPassword && !panelOpen) return null;
 
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: 600,
-        overflow: "hidden",
-        borderRadius: 18,
-        background: ink,
-        fontFamily: bodyFont,
-      }}
-    >
+    <>
       <style>{`
         @keyframes slideDown {
           from { transform: translateY(-100%); }
@@ -570,63 +549,25 @@ export default function AdminAnalyticsMockup() {
         }
       `}</style>
 
-      {/* Mock site content, behind everything — visible through the panel's frosted glass */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          padding: isMobile ? "40px 22px" : "60px 48px",
-        }}
-      >
-        <div style={{ fontFamily: displayFont, fontSize: 13, letterSpacing: 2, color: "#6f6a6f", textTransform: "uppercase" }}>
-          micotazarte.dev
-        </div>
-        <div style={{ marginTop: isMobile ? 50 : 90, fontFamily: displayFont, fontSize: isMobile ? 30 : 48, fontWeight: 700, color: "#f4f2f0", lineHeight: 1.1, maxWidth: 480 }}>
-          Cloud engineer &amp; builder.
-        </div>
-        <div style={{ marginTop: 18, fontFamily: bodyFont, fontSize: isMobile ? 13 : 15, color: "#8a8489", maxWidth: 420 }}>
-          Portfolio site running on a fully serverless AWS stack — this is a preview of the page underneath the admin panel.
-        </div>
-      </div>
-
-      {/* Lock button */}
-      {!panelOpen && (
-        <button
-          onClick={() => setShowPassword(true)}
-          aria-label="Open admin analytics"
+      {showPassword && (
+        <div
           style={{
-            position: "absolute",
-            top: 20,
-            right: 20,
-            width: 38,
-            height: 38,
-            borderRadius: 10,
-            background: "rgba(255,255,255,0.08)",
-            border: "1px solid rgba(255,255,255,0.15)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            color: "#efece9",
-            zIndex: 15,
+            position: "fixed",
+            inset: 0,
+            zIndex: 50,
+            background: "rgba(23, 21, 26, 0.45)",
+            fontFamily: bodyFont,
           }}
         >
-          <Lock size={16} />
-        </button>
-      )}
-
-      {showPassword && (
-        <PasswordGate
-          onCancel={() => setShowPassword(false)}
-          onSuccess={() => { setShowPassword(false); setPanelOpen(true); }}
-        />
+          <PasswordGate onCancel={cancelPassword} onSuccess={onAuthSuccess} />
+        </div>
       )}
 
       {panelOpen && (
-        <div style={{ position: "absolute", inset: 0, zIndex: 12 }}>
-          <AdminPanel onClose={() => setPanelOpen(false)} />
+        <div style={{ position: "fixed", inset: 0, zIndex: 40, fontFamily: bodyFont }}>
+          <AdminPanel onClose={closePanel} />
         </div>
       )}
-    </div>
+    </>
   );
 }

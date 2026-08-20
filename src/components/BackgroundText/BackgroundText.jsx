@@ -32,15 +32,14 @@ function BackgroundText() {
     return () => clearInterval(id);
   }, []);
 
-  // Global mouse tracker — fires even when other elements are on top
+  // Global mouse tracker — highlight when cursor is anywhere on the page
   useEffect(() => {
     const onMove = (e) => {
-      const el = wrapperRef.current;
-      if (!el) return;
-      const { left, top, right, bottom } = el.getBoundingClientRect();
       setHovered(
-        e.clientX >= left && e.clientX <= right &&
-        e.clientY >= top  && e.clientY <= bottom
+        e.clientX >= 0 &&
+        e.clientX <= window.innerWidth &&
+        e.clientY >= 0 &&
+        e.clientY <= window.innerHeight
       );
     };
     window.addEventListener('mousemove', onMove);
