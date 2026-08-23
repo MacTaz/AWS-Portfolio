@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { Lock, ChevronDown, X, Loader2, RefreshCw } from "lucide-react";
+import { Lock, ChevronDown, ChevronLeft, ChevronRight, X, Loader2, RefreshCw } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext.jsx";
 import {
   BarChart,
@@ -13,7 +13,7 @@ import {
 // ---- Design tokens ----
 const panelBg = "#ffffff";
 const textPrimary = "#161217";
-const textMuted = "#a68f8a";  // muted rose-taupe (tabs, secondary labels)
+const textMuted = "#594c49";  // crisp high-contrast taupe gray (tabs, secondary labels)
 const barFill = "#e6e2df";
 const accent = "#8c4f47";     // deep rust, used for anomaly/selected state
 const displayFont = "'Inter', sans-serif";
@@ -69,105 +69,70 @@ function formatChartDate(dateStr) {
   return dateStr;
 }
 
-const CAROUSEL_ITEMS = [
-  { key: "anomalies", label: "Anomalies" },
-  { key: "visits", label: "Visits Over Time" },
-  { key: "referrers", label: "Top Referrers" },
-];
-
-function normalizeAngle(deg) {
-  let a = deg % 360;
-  if (a > 180) a -= 360;
-  if (a < -180) a += 360;
-  return a;
-}
-
-// ---- Circular drag carousel ----
-function CircularCarousel({ selectedIndex, onSelect }) {
-  const isMobile = useIsMobile();
-  const radius = isMobile ? 110 : 230;
-  const [angle, setAngle] = useState(-selectedIndex * 120);
-  const dragging = useRef(false);
-  const startX = useRef(0);
-  const startAngle = useRef(0);
-
-  const settle = useCallback((finalAngle) => {
-    const nearestIndex = Math.round(-finalAngle / 120) % 3;
-    const normalizedIndex = ((nearestIndex % 3) + 3) % 3;
-    setAngle(-normalizedIndex * 120);
-    onSelect(normalizedIndex);
-  }, [onSelect]);
-
-  const onPointerDown = (e) => {
-    dragging.current = true;
-    startX.current = e.clientX;
-    startAngle.current = angle;
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-
-  const onPointerMove = (e) => {
-    if (!dragging.current) return;
-    const delta = (e.clientX - startX.current) * 0.22;
-    setAngle(startAngle.current + delta);
-  };
-
-  const onPointerUp = () => {
-    if (!dragging.current) return;
-    dragging.current = false;
-    settle(angle);
-  };
+function SlidingCapsuleTabs({ options, activeKey, onSelect, size = "normal" }) {
+  const activeIndex = options.findIndex((opt) => opt.key === activeKey);
+  const safeIndex = activeIndex >= 0 ? activeIndex : 0;
+  const isSmall = size === "small";
 
   return (
-    <div
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerLeave={onPointerUp}
-      style={{
-        position: "relative",
-        height: 76,
-        width: "100%",
-        touchAction: "pan-y",
-        cursor: "grab",
-        userSelect: "none",
-      }}
-    >
-      {CAROUSEL_ITEMS.map((item, i) => {
-        const raw = normalizeAngle(i * 120 + angle);
-        const rad = (raw * Math.PI) / 180;
-        const x = Math.sin(rad) * radius;
-        const depth = (Math.cos(rad) + 1) / 2; // 0..1, 1 = front-center
-        const scale = 0.68 + 0.45 * depth;
-        const opacity = 0.3 + 0.7 * depth;
-        const isFront = depth > 0.9;
+    <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+      <div
+        style={{
+          position: "relative",
+          display: "inline-flex",
+          alignItems: "center",
+          background: "rgba(22, 18, 23, 0.08)",
+          borderRadius: 9999,
+          padding: 4,
+          border: "1px solid rgba(22, 18, 23, 0.14)",
+          boxShadow: "0 4px 14px rgba(0, 0, 0, 0.06)",
+        }}
+      >
+        {/* Animated sliding capsule indicator */}
+        <div
+          style={{
+            position: "absolute",
+            top: 4,
+            bottom: 4,
+            left: 4,
+            width: `calc((100% - 8px) / ${options.length})`,
+            transform: `translateX(${safeIndex * 100}%)`,
+            borderRadius: 9999,
+            background: "#ffffff",
+            boxShadow: "0 3px 10px rgba(0,0,0,0.14)",
+            transition: "transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)",
+            pointerEvents: "none",
+          }}
+        />
 
-        return (
-          <button
-            key={item.key}
-            onClick={() => !dragging.current && settle(-i * 120)}
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: "50%",
-              transform: `translate(-50%, -50%) translateX(${x}px) scale(${scale})`,
-              transition: dragging.current ? "none" : "transform 0.6s cubic-bezier(.16,.84,.2,1), opacity 0.6s",
-              opacity,
-              zIndex: Math.round(depth * 100),
-              fontFamily: bodyFont,
-              fontWeight: isFront ? 600 : 500,
-              fontSize: isFront ? (isMobile ? 16 : 20) : (isMobile ? 13 : 16),
-              color: isFront ? textPrimary : textMuted,
-              background: "none",
-              border: "none",
-              padding: "6px 14px",
-              whiteSpace: "nowrap",
-              cursor: "pointer",
-            }}
-          >
-            {item.label}
-          </button>
-        );
-      })}
+        {options.map((opt) => {
+          const isActive = opt.key === activeKey;
+          return (
+            <button
+              key={opt.key}
+              onClick={() => onSelect(opt.key)}
+              style={{
+                position: "relative",
+                zIndex: 1,
+                padding: isSmall ? "8px 20px" : "10px 28px",
+                borderRadius: 9999,
+                border: "none",
+                background: "transparent",
+                color: isActive ? textPrimary : textMuted,
+                fontFamily: bodyFont,
+                fontSize: isSmall ? 14 : 15,
+                fontWeight: isActive ? 700 : 500,
+                cursor: "pointer",
+                transition: "color 0.25s ease",
+                whiteSpace: "nowrap",
+                userSelect: "none",
+              }}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -390,10 +355,197 @@ function CustomChartTooltip({ active, payload }) {
   return null;
 }
 
+const CAROUSEL_ITEMS = [
+  { key: "anomalies", label: "Anomalies" },
+  { key: "visits", label: "Visits Over Time" },
+  { key: "referrers", label: "Top Referrers" },
+];
+
+function normalizeAngle(deg) {
+  let a = deg % 360;
+  if (a > 180) a -= 360;
+  if (a < -180) a += 360;
+  return a;
+}
+
+function IntuitiveCircularCarousel({ selectedIndex, onSelect }) {
+  const isMobile = useIsMobile();
+  const radius = isMobile ? 110 : 230;
+  const [angle, setAngle] = useState(-selectedIndex * 120);
+  const dragging = useRef(false);
+  const startX = useRef(0);
+  const startAngle = useRef(0);
+
+  useEffect(() => {
+    setAngle(-selectedIndex * 120);
+  }, [selectedIndex]);
+
+  const settle = useCallback((finalAngle) => {
+    const nearestIndex = Math.round(-finalAngle / 120) % 3;
+    const normalizedIndex = ((nearestIndex % 3) + 3) % 3;
+    setAngle(-normalizedIndex * 120);
+    onSelect(normalizedIndex);
+  }, [onSelect]);
+
+  const onPointerDown = (e) => {
+    dragging.current = true;
+    startX.current = e.clientX;
+    startAngle.current = angle;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e) => {
+    if (!dragging.current) return;
+    const delta = (e.clientX - startX.current) * 0.22;
+    setAngle(startAngle.current + delta);
+  };
+
+  const onPointerUp = () => {
+    if (!dragging.current) return;
+    dragging.current = false;
+    settle(angle);
+  };
+
+  const rotateLeft = () => {
+    settle(angle + 120);
+  };
+
+  const rotateRight = () => {
+    settle(angle - 120);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          maxWidth: isMobile ? "100%" : 620,
+          height: 80,
+          margin: "0 auto",
+        }}
+      >
+        <button
+          onClick={rotateLeft}
+          aria-label="Previous graph option"
+          style={{
+            position: "absolute",
+            left: isMobile ? 4 : 20,
+            zIndex: 110,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
+            background: "rgba(22, 18, 23, 0.08)",
+            border: "1px solid rgba(22, 18, 23, 0.12)",
+            color: textPrimary,
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+            backdropFilter: "blur(4px)",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = textPrimary; e.currentTarget.style.color = "#ffffff"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(22, 18, 23, 0.08)"; e.currentTarget.style.color = textPrimary; }}
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        <div
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerLeave={onPointerUp}
+          style={{
+            position: "relative",
+            height: 76,
+            width: "100%",
+            touchAction: "pan-y",
+            cursor: "grab",
+            userSelect: "none",
+          }}
+        >
+          {CAROUSEL_ITEMS.map((item, i) => {
+            const raw = normalizeAngle(i * 120 + angle);
+            const rad = (raw * Math.PI) / 180;
+            const x = Math.sin(rad) * radius;
+            const depth = (Math.cos(rad) + 1) / 2; // 0..1, 1 = front-center
+            const scale = 0.7 + 0.43 * depth;
+            const opacity = 0.45 + 0.55 * depth;
+            const isFront = depth > 0.9;
+
+            return (
+              <button
+                key={item.key}
+                onClick={() => !dragging.current && settle(-i * 120)}
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "50%",
+                  transform: `translate(-50%, -50%) translateX(${x}px) scale(${scale})`,
+                  transition: dragging.current ? "none" : "transform 0.55s cubic-bezier(.16,.84,.2,1), opacity 0.55s",
+                  opacity,
+                  zIndex: Math.round(depth * 100),
+                  fontFamily: bodyFont,
+                  fontWeight: isFront ? 600 : 500,
+                  fontSize: isFront ? (isMobile ? 16 : 19) : (isMobile ? 13 : 15),
+                  color: isFront ? textPrimary : textMuted,
+                  background: isFront ? "rgba(255, 255, 255, 0.75)" : "transparent",
+                  border: isFront ? "1px solid rgba(22, 18, 23, 0.14)" : "none",
+                  borderRadius: 9999,
+                  padding: isFront ? "6px 18px" : "4px 12px",
+                  boxShadow: isFront ? "0 4px 12px rgba(0,0,0,0.08)" : "none",
+                  whiteSpace: "nowrap",
+                  cursor: "pointer",
+                }}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          onClick={rotateRight}
+          aria-label="Next graph option"
+          style={{
+            position: "absolute",
+            right: isMobile ? 4 : 20,
+            zIndex: 110,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
+            background: "rgba(22, 18, 23, 0.08)",
+            border: "1px solid rgba(22, 18, 23, 0.12)",
+            color: textPrimary,
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+            backdropFilter: "blur(4px)",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = textPrimary; e.currentTarget.style.color = "#ffffff"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(22, 18, 23, 0.08)"; e.currentTarget.style.color = textPrimary; }}
+        >
+          <ChevronRight size={20} />
+        </button>
+      </div>
+
+      <div style={{ fontFamily: bodyFont, fontSize: 12, fontWeight: 500, color: textMuted, marginTop: 4, letterSpacing: "0.02em" }}>
+        click arrows or drag to rotate graphs
+      </div>
+    </div>
+  );
+}
+
 function GraphsTab({ data }) {
   const isMobile = useIsMobile();
-  const [selected, setSelected] = useState(1); // default to "Visits Over Time"
-  const active = CAROUSEL_ITEMS[selected].key;
+  const [selected, setSelected] = useState(1); // default to 1: "Visits Over Time"
+  const activeKey = CAROUSEL_ITEMS[selected].key;
 
   const rawVisits = data?.visitsOverTime || [];
   const visitsOverTime = getAnomalyAnalysis(rawVisits).map((d) => ({
@@ -415,7 +567,7 @@ function GraphsTab({ data }) {
           justifyContent: "center",
         }}
       >
-        {active === "visits" && (
+        {activeKey === "visits" && (
           <div style={{ width: "100%", height: isMobile ? 210 : 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={visitsOverTime} margin={{ top: 16, right: 12, left: 12, bottom: 0 }}>
@@ -436,7 +588,7 @@ function GraphsTab({ data }) {
           </div>
         )}
 
-        {active === "referrers" && (
+        {activeKey === "referrers" && (
           <div style={{ width: "100%", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
             {topReferrers.slice(0, 6).map((r) => {
               const formattedName = formatReferrer(r.referrer);
@@ -455,7 +607,7 @@ function GraphsTab({ data }) {
           </div>
         )}
 
-        {active === "anomalies" && (
+        {activeKey === "anomalies" && (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20, width: "100%" }}>
             <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
               {visitsOverTime.map((item, i) => (
@@ -483,34 +635,8 @@ function GraphsTab({ data }) {
         )}
       </div>
 
-      <CircularCarousel selectedIndex={selected} onSelect={setSelected} />
+      <IntuitiveCircularCarousel selectedIndex={selected} onSelect={setSelected} />
     </div>
-  );
-}
-
-function TabButton({ label, active, onClick }) {
-  const [hover, setHover] = useState(false);
-
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        fontFamily: bodyFont,
-        fontWeight: active ? 700 : 500,
-        fontSize: 17,
-        color: active ? textPrimary : hover ? "#6b6469" : textMuted,
-        transform: hover ? "scale(1.08)" : "scale(1)",
-        transition: "transform 0.18s ease, color 0.18s ease",
-        padding: "6px 14px",
-      }}
-    >
-      {label}
-    </button>
   );
 }
 
@@ -540,6 +666,11 @@ function DragHandle({ onPointerDown, onPointerMove, onPointerUp }) {
     </div>
   );
 }
+
+const MAIN_TAB_OPTIONS = [
+  { key: "statistics", label: "Statistics" },
+  { key: "graphs", label: "Graphs" },
+];
 
 function AdminPanel({ onClose }) {
   const isMobile = useIsMobile();
@@ -640,9 +771,9 @@ function AdminPanel({ onClose }) {
         position: "absolute",
         inset: 0,
         overflowY: "auto",
-        background: "rgba(255,255,255,0.76)",
-        backdropFilter: "blur(28px) saturate(160%)",
-        WebkitBackdropFilter: "blur(28px) saturate(160%)",
+        background: "rgba(255,255,255,0.55)",
+        backdropFilter: "blur(10px) saturate(140%)",
+        WebkitBackdropFilter: "blur(8px) saturate(140%)",
         transform: closing ? "translate3d(0, -100%, 0)" : "translate3d(0, 0px, 0)",
         transition: closing ? "transform 0.4s cubic-bezier(.4,0,.6,1)" : "none",
         animation: closing ? "none" : "slideDown 0.55s cubic-bezier(.2,.8,.3,1)",
@@ -706,9 +837,12 @@ function AdminPanel({ onClose }) {
         )}
 
         {!loading && !error && (
-          <div style={{ display: "flex", justifyContent: "center", gap: 32, padding: "24px 0 6px", fontFamily: bodyFont }}>
-            <TabButton label="Statistics" active={tab === "statistics"} onClick={() => setTab("statistics")} />
-            <TabButton label="Graphs" active={tab === "graphs"} onClick={() => setTab("graphs")} />
+          <div style={{ padding: "28px 0 6px" }}>
+            <SlidingCapsuleTabs
+              options={MAIN_TAB_OPTIONS}
+              activeKey={tab}
+              onSelect={setTab}
+            />
           </div>
         )}
       </div>
