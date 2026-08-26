@@ -455,17 +455,18 @@ function IntuitiveCircularCarousel({ selectedIndex, onSelect }) {
         </button>
 
         <div
-          onPointerDown={onPointerDown}
+          onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); onPointerDown(e); }}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
-          onPointerLeave={onPointerUp}
+          onPointerCancel={onPointerUp}
           style={{
             position: "relative",
             height: 76,
             width: "100%",
-            touchAction: "pan-y",
+            touchAction: "none",
             cursor: "grab",
             userSelect: "none",
+            WebkitTapHighlightColor: "transparent",
           }}
         >
           {CAROUSEL_ITEMS.map((item, i) => {
@@ -500,6 +501,8 @@ function IntuitiveCircularCarousel({ selectedIndex, onSelect }) {
                   boxShadow: isFront ? "0 4px 12px rgba(0,0,0,0.08)" : "none",
                   whiteSpace: "nowrap",
                   cursor: "pointer",
+                  touchAction: "none",
+                  pointerEvents: "none",
                 }}
               >
                 {item.label}
@@ -558,17 +561,18 @@ function GraphsTab({ data }) {
   const anomalyCount = visitsOverTime.filter((d) => d.isAnomaly).length;
 
   return (
-    <div style={{ padding: isMobile ? "20px 12px 12px" : "28px 16px 12px", display: "flex", flexDirection: "column", gap: 20 }}>
+    <div style={{ padding: isMobile ? "16px 8px 8px" : "28px 16px 12px", display: "flex", flexDirection: "column", gap: 16 }}>
       <div
         style={{
-          height: isMobile ? 240 : 340,
+          height: isMobile ? 200 : 340,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          overflow: "hidden",
         }}
       >
         {activeKey === "visits" && (
-          <div style={{ width: "100%", height: isMobile ? 210 : 300 }}>
+          <div style={{ width: "100%", height: isMobile ? 180 : 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={visitsOverTime} margin={{ top: 16, right: 12, left: 12, bottom: 0 }}>
                 <XAxis
@@ -643,10 +647,10 @@ function GraphsTab({ data }) {
 function DragHandle({ onPointerDown, onPointerMove, onPointerUp }) {
   return (
     <div
-      onPointerDown={onPointerDown}
+      onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); onPointerDown(e); }}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      onPointerLeave={onPointerUp}
+      onPointerCancel={onPointerUp}
       style={{
         position: "absolute",
         bottom: 16,
@@ -660,6 +664,7 @@ function DragHandle({ onPointerDown, onPointerMove, onPointerUp }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        WebkitTapHighlightColor: "transparent",
       }}
     >
       <ChevronDown size={24} />
@@ -771,12 +776,14 @@ function AdminPanel({ onClose }) {
         position: "absolute",
         inset: 0,
         overflowY: "auto",
+        overflowX: "hidden",
         background: "rgba(255,255,255,0.55)",
         backdropFilter: "blur(10px) saturate(140%)",
         WebkitBackdropFilter: "blur(8px) saturate(140%)",
         transform: closing ? "translate3d(0, -100%, 0)" : "translate3d(0, 0px, 0)",
         transition: closing ? "transform 0.4s cubic-bezier(.4,0,.6,1)" : "none",
         animation: closing ? "none" : "slideDown 0.55s cubic-bezier(.2,.8,.3,1)",
+        WebkitOverflowScrolling: "touch",
       }}
     >
       <button
@@ -797,7 +804,7 @@ function AdminPanel({ onClose }) {
         <X size={24} />
       </button>
 
-      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column", justifyContent: "center", maxWidth: 1200, margin: "0 auto", padding: isMobile ? "60px 20px 80px" : "80px 48px 90px" }}>
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column", justifyContent: "center", maxWidth: 1200, margin: "0 auto", padding: isMobile ? "48px 16px 72px" : "80px 48px 90px" }}>
         {loading ? (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "60px 0" }}>
             <Loader2 className="animate-spin" size={36} style={{ color: textMuted }} />

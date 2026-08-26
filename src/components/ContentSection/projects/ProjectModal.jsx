@@ -135,8 +135,6 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
       className="fixed inset-0 z-50 overflow-hidden touch-none"
       style={{
         background: "rgba(255, 255, 255, 0.55)",
-        backdropFilter: "blur(10px) saturate(140%)",
-        WebkitBackdropFilter: "blur(10px) saturate(140%)",
       }}
     >
       {/* Full-screen sliding wrapper — blurred bg + modal card slide together as one unit */}
