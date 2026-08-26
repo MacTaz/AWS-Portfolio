@@ -6,12 +6,10 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [offset, setOffset] = useState(0);
   const [enableTransition, setEnableTransition] = useState(false);
-  const [bgOpacity, setBgOpacity] = useState(0.3);
   const total = projects?.length || 0;
   const isNavigatingRef = useRef(false);
 
   const SLIDE_DURATION = 600; // ms
-  const BG_FADE_DURATION = 400; // ms — bg fades faster than slide
   const EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
 
   useEffect(() => {
@@ -26,10 +24,9 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
     const exitOffset = dir === 1 ? -100 : 100;
     const enterOffset = dir === 1 ? 100 : -100;
 
-    // 1. Start: slide out + fade bg to black
+    // 1. Slide out
     setEnableTransition(true);
     setOffset(exitOffset);
-    setBgOpacity(0);
 
     setTimeout(() => {
       // 2. Snap to opposite side with new content (no transition)
@@ -37,12 +34,11 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
       setCurrentIndex((prev) => (prev + dir + total) % total);
       setOffset(enterOffset);
 
-      // 3. Slide new content in + fade bg back in
+      // 3. Slide new content in
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setEnableTransition(true);
           setOffset(0);
-          setBgOpacity(0.3);
           setTimeout(() => {
             isNavigatingRef.current = false;
           }, SLIDE_DURATION);
@@ -136,7 +132,12 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchCancel}
       onClick={onClose}
-      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl overflow-hidden touch-none"
+      className="fixed inset-0 z-50 overflow-hidden touch-none"
+      style={{
+        background: "rgba(255, 255, 255, 0.55)",
+        backdropFilter: "blur(10px) saturate(140%)",
+        WebkitBackdropFilter: "blur(10px) saturate(140%)",
+      }}
     >
       {/* Full-screen sliding wrapper — blurred bg + modal card slide together as one unit */}
       <div
@@ -148,10 +149,7 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
           <video
             src={currentProject.video}
             className="absolute inset-0 w-full h-full object-cover filter blur-3xl scale-110 pointer-events-none"
-            style={{
-              opacity: bgOpacity,
-              transition: `opacity ${BG_FADE_DURATION}ms ease`,
-            }}
+            style={{ opacity: 0.3 }}
             autoPlay
             loop
             muted
@@ -164,13 +162,25 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
           onClick={(e) => e.stopPropagation()}
           className="relative z-10 flex flex-col md:flex-row mx-4 md:mx-6 lg:mx-0 w-[calc(100vw-2rem)] md:w-[92vw] lg:w-auto h-[85vh] md:h-[75vh] lg:h-[82vh] max-h-[720px] max-w-[1050px] overflow-hidden gap-3 md:gap-4 lg:gap-6"
         >
-          {/* Close Button */}
+          {/* Close Button — matches admin panel X button style */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-30 p-2 text-white/70 hover:text-white bg-black/60 hover:bg-black/90 transition-colors cursor-pointer border border-white/10"
             aria-label="Close project view"
+            style={{
+              position: "absolute",
+              top: 16,
+              right: 16,
+              zIndex: 30,
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "#594c49",
+              padding: 8,
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = "#161217"}
+            onMouseLeave={e => e.currentTarget.style.color = "#594c49"}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
@@ -197,33 +207,40 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
             ) : null}
           </div>
 
-          {/* Right Panel — flex-shrink-0 so text gets its full needed height at standard font size */}
-          <div className="w-full md:w-[320px] lg:w-[420px] flex-shrink-0 md:flex-none h-auto md:h-full bg-black text-white p-4 md:p-6 lg:p-8 flex flex-col justify-between overflow-hidden relative z-20 min-h-0">
+          {/* Right Panel — frosted glass white, matching admin panel aesthetic */}
+          <div
+            className="w-full md:w-[320px] lg:w-[420px] flex-shrink-0 md:flex-none h-auto md:h-full p-4 md:p-6 lg:p-8 flex flex-col justify-between overflow-hidden relative z-20 min-h-0"
+            style={{
+              background: "rgba(255,255,255,0.55)",
+              backdropFilter: "blur(10px) saturate(140%)",
+              WebkitBackdropFilter: "blur(10px) saturate(140%)",
+            }}
+          >
             <div className="flex flex-col gap-3 md:gap-4">
               {/* Date top-left, no counter */}
               {currentProject.date && (
-                <span className="text-xs text-white/50 font-medium">{currentProject.date}</span>
+                <span className="text-xs font-medium" style={{ color: "#594c49" }}>{currentProject.date}</span>
               )}
 
-              <h2 className="font-inter text-xl md:text-3xl font-bold text-white tracking-tight leading-tight">
+              <h2 className="font-inter text-xl md:text-3xl font-bold tracking-tight leading-tight" style={{ color: "#161217" }}>
                 {currentProject.title}
               </h2>
 
               {currentProject.subtitle && (
-                <p className="font-inter text-sm font-semibold text-white/70">
+                <p className="font-inter text-sm font-semibold" style={{ color: "#594c49" }}>
                   {currentProject.subtitle}
                 </p>
               )}
 
               {currentProject.description && (
-                <p className="text-white/80 text-sm leading-relaxed text-justify mt-1 md:mt-2">
+                <p className="text-sm leading-relaxed text-justify mt-1 md:mt-2" style={{ color: "#2a2229" }}>
                   {currentProject.description}
                 </p>
               )}
             </div>
 
             {/* Bottom Action Links & Scroll Indicator */}
-            <div className="mt-4 pt-4 md:mt-8 md:pt-6 border-t border-white/10 flex flex-col gap-4 flex-shrink-0">
+            <div className="mt-4 pt-4 md:mt-8 md:pt-6 flex flex-col gap-4 flex-shrink-0" style={{ borderTop: "1px solid rgba(22,18,23,0.14)" }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   {currentProject.vercelUrl && (
@@ -231,7 +248,10 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
                       href={currentProject.vercelUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="opacity-70 hover:opacity-100 hover:-translate-y-0.5 transition-all text-white"
+                      className="hover:-translate-y-0.5 transition-all"
+                      style={{ color: "#161217", opacity: 0.6 }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = 1}
+                      onMouseLeave={e => e.currentTarget.style.opacity = 0.6}
                       aria-label="Vercel"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -244,10 +264,13 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
                       href={currentProject.itchUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="opacity-70 hover:opacity-100 hover:-translate-y-0.5 transition-all"
+                      className="hover:-translate-y-0.5 transition-all"
+                      style={{ opacity: 0.6 }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = 1}
+                      onMouseLeave={e => e.currentTarget.style.opacity = 0.6}
                       aria-label="itch.io"
                     >
-                      <img src={itchio} alt="itch.io" className="w-5 h-5 filter invert" />
+                      <img src={itchio} alt="itch.io" className="w-5 h-5" style={{ filter: "none" }} />
                     </a>
                   )}
                   {currentProject.githubUrl && (
@@ -255,7 +278,10 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
                       href={currentProject.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="opacity-70 hover:opacity-100 hover:-translate-y-0.5 transition-all text-white"
+                      className="hover:-translate-y-0.5 transition-all"
+                      style={{ color: "#161217", opacity: 0.6 }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = 1}
+                      onMouseLeave={e => e.currentTarget.style.opacity = 0.6}
                       aria-label="GitHub"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
