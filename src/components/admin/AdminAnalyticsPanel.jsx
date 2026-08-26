@@ -564,7 +564,8 @@ function GraphsTab({ data }) {
     <div style={{ padding: isMobile ? "16px 8px 8px" : "28px 16px 12px", display: "flex", flexDirection: "column", gap: 16 }}>
       <div
         style={{
-          height: isMobile ? 200 : 340,
+          height: isMobile ? "auto" : 340,
+          minHeight: isMobile ? 160 : undefined,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -572,9 +573,9 @@ function GraphsTab({ data }) {
         }}
       >
         {activeKey === "visits" && (
-          <div style={{ width: "100%", height: isMobile ? 180 : 300 }}>
+          <div style={{ width: "100%", height: isMobile ? 170 : 300 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={visitsOverTime} margin={{ top: 16, right: 12, left: 12, bottom: 0 }}>
+              <BarChart data={visitsOverTime} margin={{ top: 8, right: 4, left: 4, bottom: 0 }}>
                 <XAxis
                   dataKey="displayDate"
                   tick={{ fontFamily: bodyFont, fontSize: 13, fill: textMuted }}
@@ -612,15 +613,15 @@ function GraphsTab({ data }) {
         )}
 
         {activeKey === "anomalies" && (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20, width: "100%" }}>
-            <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: isMobile ? 12 : 20, width: "100%", padding: isMobile ? "8px 0" : 0 }}>
+            <div style={{ display: "flex", gap: isMobile ? 8 : 14, flexWrap: "wrap", justifyContent: "center" }}>
               {visitsOverTime.map((item, i) => (
                 <div
                   key={i}
                   title={`${formatDate(item.date).split(",")[0]}: ${item.count} visits ${item.isAnomaly ? "(Anomaly Spike)" : ""}`}
                   style={{
-                    width: item.isAnomaly ? 24 : 18,
-                    height: item.isAnomaly ? 24 : 18,
+                    width: item.isAnomaly ? (isMobile ? 18 : 24) : (isMobile ? 14 : 18),
+                    height: item.isAnomaly ? (isMobile ? 18 : 24) : (isMobile ? 14 : 18),
                     borderRadius: "50%",
                     background: item.isAnomaly ? accent : "#e6e2df",
                     cursor: "pointer",
@@ -632,7 +633,7 @@ function GraphsTab({ data }) {
               ))}
             </div>
 
-            <div style={{ fontFamily: bodyFont, fontSize: 15, color: textMuted, textAlign: "center" }}>
+            <div style={{ fontFamily: bodyFont, fontSize: isMobile ? 13 : 15, color: textMuted, textAlign: "center" }}>
               {anomalyCount} anomaly day(s) detected across {visitsOverTime.length} days tracked
             </div>
           </div>

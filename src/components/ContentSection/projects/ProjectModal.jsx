@@ -135,6 +135,8 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
       className="fixed inset-0 z-50 overflow-hidden touch-none"
       style={{
         background: "rgba(255, 255, 255, 0.55)",
+        backdropFilter: "blur(10px) saturate(140%)",
+        WebkitBackdropFilter: "blur(10px) saturate(140%)",
       }}
     >
       {/* Full-screen sliding wrapper — blurred bg + modal card slide together as one unit */}
@@ -142,18 +144,6 @@ function ProjectModal({ isOpen, initialIndex = 0, projects = [], onClose }) {
         className="absolute inset-0 flex items-center justify-center"
         style={slideStyle}
       >
-        {/* Blurred background video — no key so it never remounts mid-slide */}
-        {currentProject.video && (
-          <video
-            src={currentProject.video}
-            className="absolute inset-0 w-full h-full object-cover filter blur-3xl scale-110 pointer-events-none"
-            style={{ opacity: 0.3 }}
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-        )}
 
         {/* Modal Card */}
         <div
