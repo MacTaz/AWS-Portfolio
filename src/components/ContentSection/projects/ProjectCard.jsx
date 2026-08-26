@@ -29,7 +29,7 @@ function ProjectCard({
           ) : video ? (
             <video
               src={video}
-              className="w-full h-full object-cover group-hover/media:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover transition-opacity duration-300"
               autoPlay
               loop
               muted
@@ -39,12 +39,12 @@ function ProjectCard({
             <img
               src={image}
               alt={title}
-              className="w-full h-full object-cover group-hover/media:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover transition-opacity duration-300"
             />
           ) : null}
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/media:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <span className="bg-black/60 text-white text-xs px-3 py-1.5 rounded-full font-medium tracking-wide border border-white/20">
-              Click to expand
+          <div className="absolute inset-0 bg-black/0 group-hover/media:bg-black/30 transition-colors duration-300 flex items-center justify-center pointer-events-none">
+            <span className="font-inter opacity-0 group-hover/media:opacity-100 transition-opacity duration-300 bg-white text-gray-900 text-xs px-3 py-1.5 rounded-full font-semibold tracking-wide shadow-md cursor-pointer">
+              View
             </span>
           </div>
         </div>

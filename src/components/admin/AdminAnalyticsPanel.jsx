@@ -805,47 +805,49 @@ function AdminPanel({ onClose }) {
         <X size={24} />
       </button>
 
-      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column", justifyContent: "center", maxWidth: 1200, margin: "0 auto", padding: isMobile ? "48px 16px 72px" : "80px 48px 90px" }}>
-        {loading ? (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "60px 0" }}>
-            <Loader2 className="animate-spin" size={36} style={{ color: textMuted }} />
-            <div style={{ fontFamily: bodyFont, fontSize: 18, color: textMuted, fontWeight: 500 }}>
-              Fetching AWS Analytics...
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", maxWidth: 1200, margin: "0 auto", padding: isMobile ? "48px 16px 72px" : "80px 48px 90px" }}>
+        <div style={{ flex: 1 }}>
+          {loading ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "60px 0" }}>
+              <Loader2 className="animate-spin" size={36} style={{ color: textMuted }} />
+              <div style={{ fontFamily: bodyFont, fontSize: 18, color: textMuted, fontWeight: 500 }}>
+                Fetching AWS Analytics...
+              </div>
             </div>
-          </div>
-        ) : error ? (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "60px 0" }}>
-            <div style={{ fontFamily: bodyFont, fontSize: 18, color: accent, fontWeight: 600 }}>
-              {error}
+          ) : error ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "60px 0" }}>
+              <div style={{ fontFamily: bodyFont, fontSize: 18, color: accent, fontWeight: 600 }}>
+                {error}
+              </div>
+              <button
+                onClick={fetchAnalytics}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "10px 20px",
+                  borderRadius: 8,
+                  border: "none",
+                  background: textPrimary,
+                  color: "#fff",
+                  fontFamily: bodyFont,
+                  fontSize: 15,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                <RefreshCw size={16} /> Retry
+              </button>
             </div>
-            <button
-              onClick={fetchAnalytics}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "10px 20px",
-                borderRadius: 8,
-                border: "none",
-                background: textPrimary,
-                color: "#fff",
-                fontFamily: bodyFont,
-                fontSize: 15,
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              <RefreshCw size={16} /> Retry
-            </button>
-          </div>
-        ) : tab === "statistics" ? (
-          <StatisticsTab data={data} />
-        ) : (
-          <GraphsTab data={data} />
-        )}
+          ) : tab === "statistics" ? (
+            <StatisticsTab data={data} />
+          ) : (
+            <GraphsTab data={data} />
+          )}
+        </div>
 
         {!loading && !error && (
-          <div style={{ padding: "28px 0 6px" }}>
+          <div style={{ padding: "28px 0 6px", flexShrink: 0 }}>
             <SlidingCapsuleTabs
               options={MAIN_TAB_OPTIONS}
               activeKey={tab}
