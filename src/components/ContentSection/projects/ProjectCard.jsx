@@ -22,14 +22,14 @@ function ProjectCard({
       {hasMedia && (
         <div
           onClick={onMediaClick}
-          className="w-full max-w-full overflow-hidden bg-black aspect-square flex items-center justify-center cursor-pointer group/media relative"
+          className="w-full max-w-full overflow-hidden bg-black aspect-square flex items-center justify-center cursor-zoom-in relative"
         >
           {media && media.length > 0 ? (
             <MediaSlider media={media} aspectClass="aspect-square" />
           ) : video ? (
             <video
               src={video}
-              className="w-full h-full object-cover transition-opacity duration-300"
+              className="w-full h-full object-cover"
               autoPlay
               loop
               muted
@@ -39,14 +39,9 @@ function ProjectCard({
             <img
               src={image}
               alt={title}
-              className="w-full h-full object-cover transition-opacity duration-300"
+              className="w-full h-full object-cover"
             />
           ) : null}
-          <div className="absolute inset-0 bg-black/0 group-hover/media:bg-black/30 transition-colors duration-300 flex items-center justify-center pointer-events-none">
-            <span className="font-inter opacity-0 group-hover/media:opacity-100 transition-opacity duration-300 bg-white text-gray-900 text-xs px-3 py-1.5 rounded-full font-semibold tracking-wide shadow-md cursor-pointer">
-              View
-            </span>
-          </div>
         </div>
       )}
 
