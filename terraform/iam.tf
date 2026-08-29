@@ -109,6 +109,27 @@ resource "aws_iam_role_policy" "getanalytics_dynamodb_allow" {
   })
 }
 
+resource "aws_iam_role_policy" "getanalytics_ssm_allow" {
+  name = "getAnalytics-ssm-allow"
+  role = aws_iam_role.getanalytics_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["ssm:GetParameter"]
+        Resource = "arn:aws:ssm:us-east-1:575108955018:parameter/portfolio/admin_password"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["kms:Decrypt"]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # ============================
 # IAM Users' Managed Policies
 # ============================
@@ -162,9 +183,12 @@ resource "aws_iam_policy" "mico_personal_cli_policy" {
           "apigateway:*",
           "events:*",
           "logs:*",
+          "ssm:*",
           "iam:Get*",
           "iam:List*",
           "iam:PassRole",
+          "iam:PutRolePolicy",
+          "iam:DeleteRolePolicy",
           "iam:CreatePolicyVersion",
           "iam:DeletePolicyVersion",
           "iam:SetDefaultPolicyVersion",

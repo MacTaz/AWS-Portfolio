@@ -9,7 +9,8 @@ resource "aws_apigatewayv2_api" "portfolio_api" {
 
   cors_configuration {
     allow_origins     = ["*"]
-    allow_methods     = ["GET", "POST"]
+    allow_methods     = ["GET", "POST", "OPTIONS"]
+    allow_headers     = ["Content-Type", "x-admin-password", "X-Admin-Password"]
     allow_credentials = false
     max_age           = 0
   }

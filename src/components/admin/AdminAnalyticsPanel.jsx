@@ -19,7 +19,6 @@ const accent = "#8c4f47";     // deep rust, used for anomaly/selected state
 const displayFont = "'Inter', sans-serif";
 const bodyFont = "'Inter', sans-serif";
 
-const ADMIN_PASSWORD = "demo1234";
 const ANALYTICS_API_URL = "https://ioaty9p2d5.execute-api.us-east-1.amazonaws.com/analytics";
 
 function useIsMobile(breakpoint = 640) {
@@ -680,12 +679,13 @@ const MAIN_TAB_OPTIONS = [
 
 function AdminPanel({ onClose }) {
   const isMobile = useIsMobile();
+  const { adminPassword, initialData } = useAdmin();
   const [tab, setTab] = useState("statistics");
   const [closing, setClosing] = useState(false);
 
   // Analytics API state
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(initialData || null);
+  const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState(null);
 
   // High-performance DOM ref & drag physics
@@ -699,21 +699,30 @@ function AdminPanel({ onClose }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(ANALYTICS_API_URL);
+      const res = await fetch(ANALYTICS_API_URL, {
+        headers: {
+          "x-admin-password": adminPassword,
+        },
+      });
+      if (res.status === 401) {
+        throw new Error("Unauthorized: Incorrect admin password.");
+      }
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const json = await res.json();
       setData(json);
     } catch (err) {
       console.error("Failed to fetch analytics:", err);
-      setError("Unable to load live AWS analytics data.");
+      setError(err.message || "Unable to load live AWS analytics data.");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [adminPassword]);
 
   useEffect(() => {
-    fetchAnalytics();
-  }, [fetchAnalytics]);
+    if (!initialData) {
+      fetchAnalytics();
+    }
+  }, [fetchAnalytics, initialData]);
 
   const dismiss = useCallback(() => {
     setClosing(true);
@@ -869,7 +878,8 @@ function AdminPanel({ onClose }) {
 function PasswordGate({ onSuccess, onCancel }) {
   const isMobile = useIsMobile();
   const [value, setValue] = useState("");
-  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [verifying, setVerifying] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -877,17 +887,44 @@ function PasswordGate({ onSuccess, onCancel }) {
     return () => clearTimeout(t);
   }, []);
 
-  const check = () => {
-    if (value.trim() === ADMIN_PASSWORD) {
-      onSuccess();
-    } else {
-      setError(true);
+  const check = async () => {
+    const password = value.trim();
+    if (!password) {
+      setErrorMsg("Please enter a password");
+      return;
+    }
+    setVerifying(true);
+    setErrorMsg("");
+
+    try {
+      const res = await fetch(ANALYTICS_API_URL, {
+        headers: {
+          "x-admin-password": password,
+        },
+      });
+
+      if (res.status === 401) {
+        setErrorMsg("Incorrect password");
+        setVerifying(false);
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error(`AWS status ${res.status}`);
+      }
+
+      const json = await res.json();
+      onSuccess(json, password);
+    } catch (err) {
+      console.error("Password verification error:", err);
+      setErrorMsg("Unable to verify password with AWS");
+      setVerifying(false);
     }
   };
 
   const submit = (e) => {
     e.preventDefault();
-    check();
+    if (!verifying) check();
   };
 
   return (
@@ -923,33 +960,36 @@ function PasswordGate({ onSuccess, onCancel }) {
           ref={inputRef}
           type="password"
           value={value}
-          onChange={(e) => { setValue(e.target.value); setError(false); }}
-          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); check(); } }}
+          disabled={verifying}
+          onChange={(e) => { setValue(e.target.value); setErrorMsg(""); }}
+          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); if (!verifying) check(); } }}
           placeholder="Password"
           style={{
             fontFamily: bodyFont,
             fontSize: 15,
             padding: "12px 14px",
             borderRadius: 8,
-            border: `1px solid ${error ? accent : "#e5e2df"}`,
+            border: `1px solid ${errorMsg ? accent : "#e5e2df"}`,
             outline: "none",
             width: "100%",
             boxSizing: "border-box",
           }}
         />
-        {error && (
+        {errorMsg && (
           <div style={{ fontFamily: bodyFont, fontSize: 13, color: accent, fontWeight: 500 }}>
-            Incorrect password
+            {errorMsg}
           </div>
         )}
         <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
           <button
             type="button"
             onClick={onCancel}
+            disabled={verifying}
             style={{
               flex: 1, padding: "11px 0", borderRadius: 8, border: "none",
               background: "#f1efec", color: textPrimary, fontFamily: bodyFont,
               fontSize: 14, fontWeight: 600, cursor: "pointer",
+              opacity: verifying ? 0.6 : 1,
             }}
           >
             Cancel
@@ -957,17 +997,17 @@ function PasswordGate({ onSuccess, onCancel }) {
           <button
             type="button"
             onClick={check}
+            disabled={verifying}
             style={{
               flex: 1, padding: "11px 0", borderRadius: 8, border: "none",
               background: textPrimary, color: "#fff", fontFamily: bodyFont,
               fontSize: 14, fontWeight: 600, cursor: "pointer",
+              display: "flex", alignItems: "center", justify: "center", gap: 6,
+              opacity: verifying ? 0.8 : 1,
             }}
           >
-            Enter
+            {verifying ? <Loader2 className="animate-spin" size={16} /> : "Enter"}
           </button>
-        </div>
-        <div style={{ fontFamily: bodyFont, fontSize: 12, color: textMuted, textAlign: "center" }}>
-          demo password: {ADMIN_PASSWORD}
         </div>
       </form>
     </div>

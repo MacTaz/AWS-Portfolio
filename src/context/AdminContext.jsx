@@ -5,11 +5,15 @@ const AdminContext = createContext(null);
 export function AdminProvider({ children }) {
   const [showPassword, setShowPassword] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [initialData, setInitialData] = useState(null);
 
   const openPasswordGate = useCallback(() => setShowPassword(true), []);
   const cancelPassword = useCallback(() => setShowPassword(false), []);
 
-  const onAuthSuccess = useCallback(() => {
+  const onAuthSuccess = useCallback((data, pwd) => {
+    if (data) setInitialData(data);
+    if (pwd) setAdminPassword(pwd);
     setShowPassword(false);
     setPanelOpen(true);
   }, []);
@@ -32,6 +36,8 @@ export function AdminProvider({ children }) {
       value={{
         showPassword,
         panelOpen,
+        adminPassword,
+        initialData,
         openPasswordGate,
         cancelPassword,
         onAuthSuccess,
