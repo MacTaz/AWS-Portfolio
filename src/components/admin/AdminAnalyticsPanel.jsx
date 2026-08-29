@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { Lock, ChevronDown, ChevronLeft, ChevronRight, X, Loader2, RefreshCw } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, X, Loader2, RefreshCw } from "lucide-react";
+import { FaLock } from "react-icons/fa6";
 import { useAdmin } from "@/context/AdminContext.jsx";
 import {
   BarChart,
@@ -941,21 +942,44 @@ function PasswordGate({ onSuccess, onCancel }) {
       <form
         onSubmit={submit}
         style={{
-          background: panelBg,
-          borderRadius: 12,
-          border: "none",
-          padding: "32px 34px",
+          background: "rgba(255,255,255,0.72)",
+          backdropFilter: "blur(20px) saturate(160%)",
+          WebkitBackdropFilter: "blur(20px) saturate(160%)",
+          borderRadius: 0,
+          border: "1px solid rgba(255,255,255,0.85)",
+          padding: isMobile ? "28px 24px" : "32px 34px",
           width: isMobile ? "85vw" : 300,
           maxWidth: 340,
-          boxShadow: "0 20px 50px rgba(0,0,0,0.18)",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.8) inset",
           display: "flex",
           flexDirection: "column",
           gap: 16,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 10, fontFamily: displayFont, fontWeight: 700, fontSize: 18, color: textPrimary }}>
-          <Lock size={18} /> Admin Access
+        {/* Header: lock icon + title */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{
+            width: 36, height: 36,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            background: "rgba(255,255,255,0.60)",
+            backdropFilter: "blur(8px)",
+            border: "1px solid rgba(255,255,255,0.85)",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+            borderRadius: 0,
+            flexShrink: 0,
+          }}>
+            <FaLock style={{ width: 14, height: 14, color: textPrimary }} />
+          </div>
+          <div>
+            <div style={{ fontFamily: displayFont, fontWeight: 700, fontSize: 15, color: textPrimary, lineHeight: 1.2 }}>Admin Access</div>
+            <div style={{ fontFamily: bodyFont, fontWeight: 500, fontSize: 12, color: textMuted, marginTop: 2 }}>Verify to continue</div>
+          </div>
         </div>
+
+        {/* Divider */}
+        <div style={{ height: 1, background: "rgba(22,18,23,0.07)", margin: "0 -2px" }} />
+
+        {/* Password input */}
         <input
           ref={inputRef}
           type="password"
@@ -963,33 +987,44 @@ function PasswordGate({ onSuccess, onCancel }) {
           disabled={verifying}
           onChange={(e) => { setValue(e.target.value); setErrorMsg(""); }}
           onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); if (!verifying) check(); } }}
-          placeholder="Password"
+          placeholder="Enter password"
           style={{
             fontFamily: bodyFont,
-            fontSize: 15,
-            padding: "12px 14px",
-            borderRadius: 8,
-            border: `1px solid ${errorMsg ? accent : "#e5e2df"}`,
+            fontSize: 14,
+            padding: "11px 14px",
+            borderRadius: 0,
+            border: `1px solid ${errorMsg ? accent : "rgba(22,18,23,0.15)"}`,
             outline: "none",
             width: "100%",
             boxSizing: "border-box",
+            background: "rgba(255,255,255,0.55)",
+            color: textPrimary,
+            letterSpacing: errorMsg ? 0 : "0.02em",
+            transition: "border-color 0.2s ease",
           }}
         />
+
+        {/* Error message */}
         {errorMsg && (
-          <div style={{ fontFamily: bodyFont, fontSize: 13, color: accent, fontWeight: 500 }}>
+          <div style={{ fontFamily: bodyFont, fontSize: 12, color: accent, fontWeight: 600, marginTop: -8 }}>
             {errorMsg}
           </div>
         )}
-        <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
+
+        {/* Buttons */}
+        <div style={{ display: "flex", gap: 8 }}>
           <button
             type="button"
             onClick={onCancel}
             disabled={verifying}
             style={{
-              flex: 1, padding: "11px 0", borderRadius: 8, border: "none",
-              background: "#f1efec", color: textPrimary, fontFamily: bodyFont,
-              fontSize: 14, fontWeight: 600, cursor: "pointer",
-              opacity: verifying ? 0.6 : 1,
+              flex: 1, padding: "10px 0", borderRadius: 0,
+              border: "1px solid rgba(22,18,23,0.15)",
+              background: "rgba(255,255,255,0.55)",
+              color: textMuted, fontFamily: bodyFont,
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
+              opacity: verifying ? 0.5 : 1,
+              transition: "opacity 0.2s ease",
             }}
           >
             Cancel
@@ -999,14 +1034,16 @@ function PasswordGate({ onSuccess, onCancel }) {
             onClick={check}
             disabled={verifying}
             style={{
-              flex: 1, padding: "11px 0", borderRadius: 8, border: "none",
+              flex: 1, padding: "10px 0", borderRadius: 0,
+              border: "none",
               background: textPrimary, color: "#fff", fontFamily: bodyFont,
-              fontSize: 14, fontWeight: 600, cursor: "pointer",
-              display: "flex", alignItems: "center", justify: "center", gap: 6,
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
               opacity: verifying ? 0.8 : 1,
+              transition: "opacity 0.2s ease",
             }}
           >
-            {verifying ? <Loader2 className="animate-spin" size={16} /> : "Enter"}
+            {verifying ? <Loader2 className="animate-spin" size={14} /> : "Enter"}
           </button>
         </div>
       </form>
