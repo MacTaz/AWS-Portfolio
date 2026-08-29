@@ -13,7 +13,7 @@ function CertificationsSlider({ items }) {
     setTimeout(() => {
       setCurrent(index);
       setFading(false);
-    }, 250);
+    }, 200);
   };
 
   const prev = () => go((current - 1 + total) % total);
@@ -21,36 +21,85 @@ function CertificationsSlider({ items }) {
 
   const activeItem = items[current];
 
-  const ArrowBtn = ({ onClick, label, children }) => (
-    <button
-      onClick={onClick}
-      aria-label={label}
-      className="flex-shrink-0 flex items-center justify-center w-10 self-stretch bg-white hover:bg-gray-100 transition-colors duration-200 cursor-pointer border-0 group/arrow"
-    >
-      <span className="text-gray-400 group-hover/arrow:text-gray-800 transition-colors duration-200">
-        {children}
-      </span>
-    </button>
-  );
-
   return (
-    <div className="w-full flex flex-col gap-3">
-      {/* Row: left arrow · certificate image container · right arrow */}
-      <div className="flex items-stretch w-full overflow-hidden border border-gray-100 shadow-sm">
-        {total > 1 && (
-          <ArrowBtn onClick={prev} label="Previous certification">
-            <svg width="13" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </ArrowBtn>
-        )}
+    <div className="w-full flex flex-col gap-4">
+      {/* Sleek Sharp Glass Tab Selector */}
+      {total > 1 && (
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+          {items.map((item, idx) => {
+            const isActive = idx === current;
+            // Extract concise label from title
+            const words = item.title.split(" ");
+            const shortTitle = words.length > 2 ? `${words[0]} ${words[1]}` : item.title;
 
-        {/* Certificate Image Frame */}
-        <div className="flex-1 aspect-[4/3] overflow-hidden bg-black flex items-center justify-center">
+            return (
+              <button
+                key={idx}
+                onClick={() => go(idx)}
+                className={[
+                  "font-inter text-xs font-semibold uppercase tracking-wider px-3.5 py-2 border transition-colors cursor-pointer shrink-0 whitespace-nowrap",
+                  isActive
+                    ? "bg-gray-900 text-white border-gray-900"
+                    : "bg-white/40 text-gray-600 border-white/80 backdrop-blur-md",
+                ].join(" ")}
+              >
+                0{idx + 1}. {shortTitle}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Unified Sharp Frosted Glass Card Container */}
+      <div className="w-full flex flex-col gap-5 bg-white/60 backdrop-blur-xl p-6 border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+        {/* Top Header: Title, Subtitle, Date & Arrow Controls */}
+        <div className="flex items-start justify-between w-full gap-4 flex-wrap">
+          <div className="flex flex-col gap-1 max-w-[80%]">
+            <span className="font-inter text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              {activeItem.subtitle || "Certification"}
+            </span>
+            <h3 className="font-inter text-xl font-bold text-gray-900 leading-tight">
+              {activeItem.title}
+            </h3>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            {activeItem.date && (
+              <span className="font-inter text-xs font-semibold text-gray-500 border border-gray-200/80 bg-white/50 px-2.5 py-1">
+                {activeItem.date}
+              </span>
+            )}
+            {total > 1 && (
+              <div className="flex items-center border border-white/80 bg-white/50 backdrop-blur-md">
+                <button
+                  onClick={prev}
+                  aria-label="Previous certification"
+                  className="p-1.5 text-gray-500 border-r border-white/80 cursor-pointer"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+                <button
+                  onClick={next}
+                  aria-label="Next certification"
+                  className="p-1.5 text-gray-500 cursor-pointer"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Media Frame */}
+        <div className="w-full aspect-video overflow-hidden bg-black/90 border border-white/80 shadow-inner relative flex items-center justify-center">
           <div
             style={{
               opacity: fading ? 0 : 1,
-              transition: "opacity 0.25s ease",
+              transition: "opacity 0.2s ease",
               width: "100%",
               height: "100%",
             }}
@@ -59,7 +108,7 @@ function CertificationsSlider({ items }) {
               <video
                 key={activeItem.video}
                 src={activeItem.video}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
                 autoPlay
                 loop
                 muted
@@ -69,63 +118,19 @@ function CertificationsSlider({ items }) {
               <img
                 src={activeItem.image}
                 alt={activeItem.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             ) : null}
           </div>
         </div>
 
-        {total > 1 && (
-          <ArrowBtn onClick={next} label="Next certification">
-            <svg width="13" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </ArrowBtn>
-        )}
-      </div>
-
-      {/* Certification details below the image */}
-      <div className="flex flex-col items-start gap-1 px-1 pt-1">
-        <div className="flex items-center justify-between w-full">
-          <p className="font-inter text-xl font-bold text-gray-900">
-            {activeItem.title}
-          </p>
-          {activeItem.date && (
-            <span className="text-sm text-gray-500 font-semibold">
-              {activeItem.date}
-            </span>
-          )}
-        </div>
-        {activeItem.subtitle && (
-          <p className="font-inter text-base font-semibold text-gray-600">
-            {activeItem.subtitle}
-          </p>
-        )}
+        {/* Description if present */}
         {activeItem.description && (
-          <p className="text-base font-medium text-gray-800 mt-1 leading-relaxed">
+          <p className="font-inter font-medium text-sm leading-relaxed text-gray-700">
             {activeItem.description}
           </p>
         )}
       </div>
-
-      {/* Navigation dots */}
-      {total > 1 && (
-        <div className="flex items-center justify-center gap-1.5 mt-1">
-          {items.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => go(i)}
-              aria-label={`Go to certification ${i + 1}`}
-              className={[
-                "transition-all duration-300 cursor-pointer border-0 p-0",
-                i === current
-                  ? "w-4 h-1 bg-gray-900"
-                  : "w-2 h-1 bg-gray-300 hover:bg-gray-500",
-              ].join(" ")}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }

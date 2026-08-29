@@ -11,7 +11,7 @@ function SkillsSection({ categories = defaultCategories }) {
         {categories.map((cat) => (
           <div
             key={cat.category}
-            className="flex flex-col gap-2.5 bg-gray-50/60 p-5 border border-gray-200/80"
+            className="flex flex-col gap-2.5 bg-white/60 backdrop-blur-xl p-5 border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
           >
             <span className="font-inter font-bold text-xs text-gray-500 uppercase tracking-wider">
               {cat.category}

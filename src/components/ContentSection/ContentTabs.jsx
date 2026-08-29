@@ -2,7 +2,7 @@ import { TABS as defaultTabs } from "@/components/ContentSection/portfolioData";
 
 function ContentTabs({ tabs = defaultTabs, activeTab, onTabChange }) {
   return (
-    <div className="sticky top-0 z-30 bg-white/75 backdrop-blur-md px-4 md:px-6 lg:px-8 pt-8 md:pt-10 pb-3 -mx-4 md:-mx-6 lg:-mx-8">
+    <div className="sticky top-0 z-30 bg-white/60 backdrop-blur-xl border-b border-white/40 px-4 md:px-6 lg:px-8 pt-8 md:pt-10 pb-3 -mx-4 md:-mx-6 lg:-mx-8">
       <div className="flex items-center justify-center gap-6 flex-wrap w-full">
         {tabs.map((tab) => (
           <button
