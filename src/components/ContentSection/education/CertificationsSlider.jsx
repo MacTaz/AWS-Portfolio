@@ -95,7 +95,7 @@ function CertificationsSlider({ items }) {
         </div>
 
         {/* Media Frame */}
-        <div className="w-full aspect-video overflow-hidden bg-black/90 border border-white/80 shadow-inner relative flex items-center justify-center">
+        <div className="w-full aspect-[4/3] overflow-hidden bg-black/90 border border-white/80 shadow-inner relative flex items-center justify-center">
           <div
             style={{
               opacity: fading ? 0 : 1,

@@ -86,33 +86,33 @@ function ExperienceCard({
       </div>
 
       {/* Box 2: Top Right - 60% (6/10) */}
-      <div className="md:col-span-6 w-full aspect-video md:aspect-square overflow-hidden bg-black/90 border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative flex items-center justify-center">
+      <div className="md:col-span-6 w-full aspect-square overflow-hidden bg-black/90 border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative flex items-center justify-center">
         {media1 ? (
           media1.video ? (
-            <video src={media1.video} className="w-full h-full object-contain" autoPlay loop muted playsInline />
+            <video src={media1.video} className="w-full h-full object-cover" autoPlay loop muted playsInline />
           ) : media1.image ? (
-            <img src={media1.image} alt={title} className="w-full h-full object-contain" />
+            <img src={media1.image} alt={title} className="w-full h-full object-cover" />
           ) : null
         ) : video ? (
-          <video src={video} className="w-full h-full object-contain" autoPlay loop muted playsInline />
+          <video src={video} className="w-full h-full object-cover" autoPlay loop muted playsInline />
         ) : image ? (
-          <img src={image} alt={title} className="w-full h-full object-contain" />
+          <img src={image} alt={title} className="w-full h-full object-cover" />
         ) : null}
       </div>
 
       {/* Box 3: Bottom Left - 60% (6/10) */}
-      <div className="md:col-span-6 w-full aspect-video md:aspect-square overflow-hidden bg-black/90 border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative flex items-center justify-center">
+      <div className="md:col-span-6 w-full aspect-square overflow-hidden bg-black/90 border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative flex items-center justify-center">
         {media2 ? (
           media2.video ? (
-            <video src={media2.video} className="w-full h-full object-contain" autoPlay loop muted playsInline />
+            <video src={media2.video} className="w-full h-full object-cover" autoPlay loop muted playsInline />
           ) : media2.image ? (
-            <img src={media2.image} alt={title} className="w-full h-full object-contain" />
+            <img src={media2.image} alt={title} className="w-full h-full object-cover" />
           ) : null
         ) : media1 ? (
           media1.video ? (
-            <video src={media1.video} className="w-full h-full object-contain" autoPlay loop muted playsInline />
+            <video src={media1.video} className="w-full h-full object-cover" autoPlay loop muted playsInline />
           ) : media1.image ? (
-            <img src={media1.image} alt={title} className="w-full h-full object-contain" />
+            <img src={media1.image} alt={title} className="w-full h-full object-cover" />
           ) : null
         ) : null}
       </div>
