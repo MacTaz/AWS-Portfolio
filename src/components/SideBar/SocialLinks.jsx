@@ -1,4 +1,4 @@
-import { FaFacebookF, FaLinkedinIn, FaItchIo, FaEnvelope, FaLock } from 'react-icons/fa6'
+import { FaFacebookF, FaLinkedinIn, FaGithub, FaItchIo, FaEnvelope, FaLock } from 'react-icons/fa6'
 import { useAdmin } from '@/context/AdminContext.jsx'
 
 function SocialLinks() {
@@ -26,6 +26,16 @@ function SocialLinks() {
           aria-label="LinkedIn"
         >
           <FaLinkedinIn className="w-4 h-4" />
+        </a>
+        <a
+          href="https://github.com/MacTaz"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-10 h-10 flex items-center justify-center bg-white/60 backdrop-blur-md border border-white/80 text-gray-600 hover:text-gray-900 transition-colors shadow-[0_4px_16px_rgb(0,0,0,0.03)]"
+          title="GitHub"
+          aria-label="GitHub"
+        >
+          <FaGithub className="w-4 h-4" />
         </a>
         <a
           href="https://mactaz.itch.io/"
