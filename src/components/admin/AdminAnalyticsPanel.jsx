@@ -957,15 +957,11 @@ function PasswordGate({ onSuccess, onCancel }) {
         }}
       >
         {/* Header: lock icon + title */}
+        {/* Header: lock icon + title */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{
             width: 36, height: 36,
             display: "flex", alignItems: "center", justifyContent: "center",
-            background: "rgba(255,255,255,0.60)",
-            backdropFilter: "blur(8px)",
-            border: "1px solid rgba(255,255,255,0.85)",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
-            borderRadius: 0,
             flexShrink: 0,
           }}>
             <FaLock style={{ width: 14, height: 14, color: textPrimary }} />
@@ -1071,7 +1067,9 @@ export default function AdminAnalyticsPanel() {
             position: "fixed",
             inset: 0,
             zIndex: 50,
-            background: "rgba(23, 21, 26, 0.45)",
+            background: "rgba(255,255,255,0.55)",
+            backdropFilter: "blur(10px) saturate(140%)",
+            WebkitBackdropFilter: "blur(8px) saturate(140%)",
             fontFamily: bodyFont,
           }}
         >

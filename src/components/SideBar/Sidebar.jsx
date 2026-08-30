@@ -12,10 +12,19 @@ function Sidebar() {
         </div>
       </div>
 
-      <div className="max-w-[26ch] md:max-w-[22ch] text-center md:text-left mt-20">
+      <div className="max-w-[26ch] md:max-w-[23ch] text-center md:text-left mt-20">
+
         <p className="font-inter font-medium text-sm leading-relaxed">
-          I'm a computer science student specializing in data science, with a strong interest in cloud computing and a creative outlet in game development. I bring leadership experience from my involvement in student organizations, along with hands-on experience from participating in AI hackathons. Explore this site for a closer look at my background, projects, and experience as I work toward a career in the field.
+          I'm a <span className="text-gray-500">3rd year</span>{" "}
+          <span className="text-gray-500">computer science</span> student
+          specializing in <span className="text-gray-500">data science</span>,
+          with a strong interest in <span className="text-gray-500">cloud computing</span> and a creative outlet in
+          <span className="text-gray-500"> game development</span>. I bring leadership experience from my involvement
+          in student organizations, along with hands-on experience from participating in AI hackathons.
+          Explore this site for a closer look at my background, projects, and experience as I work toward a
+          career in the field.
         </p>
+
       </div>
 
       <div className="mt-6 md:mt-auto md:mb-12">
