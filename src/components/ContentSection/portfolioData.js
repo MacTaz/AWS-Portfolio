@@ -6,7 +6,7 @@ import sampleimage from "@/assets/sampleimage.png";
 export const projects = [
   {
     title: "lost.",
-    description: "Lost is a first-person survival horror game inspired by classic psychological horror experiences, where players must explore a dark, unsettling environment while evading a relentless entity. Developed using Unity, the game emphasizes immersive atmosphere, environmental storytelling, and suspense-driven gameplay through AI-powered enemy behavior, dynamic lighting, and sound design to create a tense and engaging player experience.",
+    description: "Lost is a first-person survival horror game made in Godot, heavily inspired by PS2-era horror and that old PSX look — low-poly models, warped textures, grainy visuals. You explore a dark, oppressive environment while being hunted by a relentless entity, a tall faceless figure inspired by Slenderman. Dynamic lighting, AI-driven enemy behavior, and sound design all come together to build that tense, retro survival horror feel.",
     video: lost_vid,
     githubUrl: "https://github.com/",
     itchUrl: "https://itch.io/",
@@ -16,24 +16,23 @@ export const projects = [
     title: "RePurpose",
     description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.",
     video: repurpose_vid,
-    githubUrl: "https://github.com/",
-    vercelUrl: "https://vercel.com/",
+    githubUrl: "https://github.com/MacTaz/RePurpose",
+    vercelUrl: "repurpose-murex.vercel.app",
     date: "2024",
   },
   {
     title: "Tagu-Taguan",
-    description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.",
+    description: "Tagu-Taguan is a 2D game made in Godot, heavily inspired by Filipino mythology and folklore. It's my first game built in the engine, so I kept the mechanics simple and leaned into that classic arcade feel — quick to pick up, easy to jump into, but still challenging to master. Expect creatures and imagery pulled straight from Filipino legends, wrapped in straightforward gameplay that focuses on fun over complexity.",
     video: taguan_vid,
-    githubUrl: "https://github.com/",
-    itchUrl: "https://itch.io/",
+    githubUrl: "https://github.com/MacTaz/Tagu-Taguan/",
+    itchUrl: "https://bananabvnny.itch.io/tagu-taguan",
     date: "2024",
   },
   {
     title: "Cloud Website",
-    description: "Led the development of RePurpose, a full-stack web application designed to connect donors with organizations through a category-based matching system. Built with secure user authentication and database management powered by Supabase, the platform provides a seamless and efficient donation experience while ensuring reliable data handling. The application was deployed on Vercel and managed using Git and GitHub, emphasizing scalability, maintainability, and collaborative software development practices.",
+    description: "Cloud Resume Portfolio is a serverless personal site built on AWS, based on the Cloud Resume Challenge with a couple of my own twists thrown in. Instead of clicking through the AWS console, the entire infrastructure — S3, CloudFront, API Gateway, Lambda, DynamoDB, IAM — is defined and deployed through Terraform, so the whole stack can be torn down and rebuilt from code alone. On top of the usual visitor counter, I added a hidden admin analytics panel, gated behind a password-protected Lambda endpoint that verifies credentials server-side via AWS SSM Parameter Store, so nothing sensitive ever touches the frontend bundle. It's less about the resume itself and more about proving out a real, secure, infrastructure-as-code AWS pipeline from the ground up.",
     video: lost_vid,
-    githubUrl: "https://github.com/",
-    date: "2024",
+    githubUrl: "https://github.com/MacTaz/AWS-Portfolio",
   },
 ];
 
