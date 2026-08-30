@@ -3,6 +3,16 @@ import repurpose_vid from "@/assets/VIDEOS/repurpose_vid.mp4";
 import taguan_vid from "@/assets/VIDEOS/taguan_vid.mp4";
 import sampleimage from "@/assets/sampleimage.png";
 
+import MGC_1 from "@/assets/IMAGES/MGC/MGC_1.png";
+import MGC_2 from "@/assets/IMAGES/MGC/MGC_2.png";
+
+import ARCUS_1 from "@/assets/IMAGES/AWS/ARCUS_1.png";
+import ARCUS_2 from "@/assets/IMAGES/AWS/ARCUS_2.png";
+
+
+import CONVERGE_1 from "@/assets/IMAGES/CONVERGE/CONVERGE_1.jpg";
+import CONVERGE_2 from "@/assets/IMAGES/CONVERGE/CONVERGE_2.jpg";
+
 export const projects = [
   {
     title: "lost.",
@@ -81,13 +91,12 @@ export const experience = [
     subtitle: "Student Builder Group",
     date: "August 2026 - Present",
     bullets: [
-      "Developed SangAI, a web-based AI learning platform to improve digital literacy and export readiness of Philippine MSMEs through real-time AI guidance and localized mentorship.",
-      "Integrated Converge AI APIs to deliver adaptive problem simulations that enhance user progression and confidence in digital skills.",
+      "Developed form automation systems for AWS-SBG Arcus, establishing the event proposal as a single source of truth to automate document generation and streamline workflows for future Corporate Secretaries.",
+      "Managed the organization’s project proposals, post-event documentation, permits, and required paperwork, ensuring all administrative requirements were properly prepared, processed, and completed.",
     ],
     media: [
-      { video: repurpose_vid },
-      { video: lost_vid },
-      { video: taguan_vid },
+      { image: ARCUS_1 },
+      { image: ARCUS_2 },
     ],
     stacked: true,
   },
@@ -97,9 +106,8 @@ export const experience = [
     date: "August 2024 - August 2025",
     description: "Led team meetings, events, and internal communications; demonstrated strong collaboration and organizational skills.",
     media: [
-      { video: lost_vid },
-      { video: repurpose_vid },
-      { video: taguan_vid },
+      { image: MGC_1 },
+      { image: MGC_2 },
     ],
     stacked: true,
   },
@@ -112,9 +120,8 @@ export const experience = [
       "Integrated Converge AI APIs to deliver adaptive problem simulations that enhance user progression and confidence in digital skills.",
     ],
     media: [
-      { video: repurpose_vid },
-      { video: lost_vid },
-      { video: taguan_vid },
+      { image: CONVERGE_1 },
+      { image: CONVERGE_2 },
     ],
     stacked: true,
   },
