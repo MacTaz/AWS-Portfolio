@@ -48,19 +48,14 @@ export const projects = [
 
 export const education = [
   {
-    title: "Bachelor of Computer Science",
-    subtitle: "Data Science Specialization | Mapua University",
+    title: "Mapúa University",
+    subtitle: "Bachelor in Computer Science | Data Science Specialization",
     date: "2024 – Ongoing",
     bullets: [
-      "Dean Lister across multiple terms with a strong and sustained GWA.",
-      "DOST S&T Undergraduate Scholarship, Recipient of the DOST Scholarship.",
+      "Maintained Dean's Lister standing across multiple terms with a strong, sustained GWA",
+      "Recipient of the DOST Science & Technology Undergraduate Scholarship, a nationwide merit-based scholarship",
       "Relevant Coursework: Data Structures & Algorithms, Discrete Mathematics, Data Science, Software Engineering, Operating Systems, Data Communication & Networking, Computer Architecture, Quantitative Methods, Automata Theory.",
     ],
-  },
-  {
-    title: "Colegio De San Juan De Letran",
-    subtitle: "Senior High School",
-    bullets: ["Graduated with High Honors.", "Winning Best Research."],
   },
 ];
 
