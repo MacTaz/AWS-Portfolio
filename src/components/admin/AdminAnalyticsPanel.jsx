@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, X, Loader2, RefreshCw } from "lucide-react";
+import { ChevronDown, X, Loader2, RefreshCw } from "lucide-react";
 import { FaLock } from "react-icons/fa6";
 import { useAdmin } from "@/context/AdminContext.jsx";
 import {
@@ -12,13 +12,21 @@ import {
 } from "recharts";
 
 // ---- Design tokens ----
-const panelBg = "#ffffff";
 const textPrimary = "#161217";
-const textMuted = "#594c49";  // crisp high-contrast taupe gray (tabs, secondary labels)
+const textMuted = "#594c49";  // crisp high-contrast taupe gray
 const barFill = "#e6e2df";
-const accent = "#8c4f47";     // deep rust, used for anomaly/selected state
+const accent = "#332f35";     // soft lighter black for anomaly state
 const displayFont = "'Inter', sans-serif";
 const bodyFont = "'Inter', sans-serif";
+
+const glassCardStyle = {
+  background: "rgba(255, 255, 255, 0.62)",
+  backdropFilter: "blur(20px) saturate(160%)",
+  WebkitBackdropFilter: "blur(20px) saturate(160%)",
+  border: "1px solid rgba(255, 255, 255, 0.85)",
+  borderRadius: 0, // sharp edges
+  boxShadow: "0 8px 30px rgba(0, 0, 0, 0.04)",
+};
 
 const ANALYTICS_API_URL = "https://ioaty9p2d5.execute-api.us-east-1.amazonaws.com/analytics";
 
@@ -32,17 +40,6 @@ function useIsMobile(breakpoint = 640) {
     return () => window.removeEventListener("resize", onResize);
   }, [breakpoint]);
   return isMobile;
-}
-
-// Helpers for data formatting
-function formatReferrer(ref) {
-  if (!ref || ref === "direct") return "Direct / None";
-  try {
-    const url = new URL(ref);
-    return url.hostname + (url.port ? `:${url.port}` : "");
-  } catch {
-    return ref.replace(/^https?:\/\//, "").replace(/\/$/, "");
-  }
 }
 
 function formatDate(isoStr) {
@@ -69,74 +66,6 @@ function formatChartDate(dateStr) {
   return dateStr;
 }
 
-function SlidingCapsuleTabs({ options, activeKey, onSelect, size = "normal" }) {
-  const activeIndex = options.findIndex((opt) => opt.key === activeKey);
-  const safeIndex = activeIndex >= 0 ? activeIndex : 0;
-  const isSmall = size === "small";
-
-  return (
-    <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-      <div
-        style={{
-          position: "relative",
-          display: "inline-flex",
-          alignItems: "center",
-          background: "rgba(22, 18, 23, 0.08)",
-          borderRadius: 9999,
-          padding: 4,
-          border: "1px solid rgba(22, 18, 23, 0.14)",
-          boxShadow: "0 4px 14px rgba(0, 0, 0, 0.06)",
-        }}
-      >
-        {/* Animated sliding capsule indicator */}
-        <div
-          style={{
-            position: "absolute",
-            top: 4,
-            bottom: 4,
-            left: 4,
-            width: `calc((100% - 8px) / ${options.length})`,
-            transform: `translateX(${safeIndex * 100}%)`,
-            borderRadius: 9999,
-            background: "#ffffff",
-            boxShadow: "0 3px 10px rgba(0,0,0,0.14)",
-            transition: "transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)",
-            pointerEvents: "none",
-          }}
-        />
-
-        {options.map((opt) => {
-          const isActive = opt.key === activeKey;
-          return (
-            <button
-              key={opt.key}
-              onClick={() => onSelect(opt.key)}
-              style={{
-                position: "relative",
-                zIndex: 1,
-                padding: isSmall ? "8px 20px" : "10px 28px",
-                borderRadius: 9999,
-                border: "none",
-                background: "transparent",
-                color: isActive ? textPrimary : textMuted,
-                fontFamily: bodyFont,
-                fontSize: isSmall ? 14 : 15,
-                fontWeight: isActive ? 700 : 500,
-                cursor: "pointer",
-                transition: "color 0.25s ease",
-                whiteSpace: "nowrap",
-                userSelect: "none",
-              }}
-            >
-              {opt.label}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 function AnimatedNumber({ value, duration = 900 }) {
   const [display, setDisplay] = useState(0);
 
@@ -157,7 +86,7 @@ function AnimatedNumber({ value, duration = 900 }) {
   return <>{display}</>;
 }
 
-function StatCard({ label, value, valueSize = 48, valueColor, animate, subtitle, badge }) {
+function StatCard({ label, value, valueSize = 44, valueColor, animate, subtitle, badge }) {
   return (
     <div
       style={{
@@ -182,120 +111,6 @@ function StatCard({ label, value, valueSize = 48, valueColor, animate, subtitle,
           {subtitle}
         </div>
       )}
-    </div>
-  );
-}
-
-function AnomalyStatCard({ anomalyDetected, latestAnomalyDate, lastUpdated }) {
-  const [hover, setHover] = useState(false);
-
-  const displayDate = latestAnomalyDate
-    ? formatDate(latestAnomalyDate).split(",")[0]
-    : formatDate(lastUpdated).split(",")[0];
-
-  return (
-    <div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justify: "flex-start",
-        cursor: "pointer",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-        <span style={{ fontFamily: bodyFont, fontSize: 14, fontWeight: 600, color: textMuted }}>
-          Anomaly Status
-        </span>
-        {anomalyDetected && (
-          <span style={{ background: "rgba(140,79,71,0.12)", color: accent, fontSize: 12, fontWeight: 700, padding: "2px 8px", borderRadius: 4 }}>
-            Flagged
-          </span>
-        )}
-      </div>
-
-      <div style={{ fontFamily: displayFont, fontSize: hover ? 24 : 28, fontWeight: 600, letterSpacing: "-0.03em", color: anomalyDetected ? accent : textPrimary, lineHeight: 1.1, transition: "all 0.2s ease" }}>
-        {hover ? displayDate : (anomalyDetected ? "Anomaly Flagged" : "None Detected")}
-      </div>
-
-      <div style={{ fontFamily: bodyFont, fontSize: 13, fontWeight: 500, color: textMuted, marginTop: 6, transition: "all 0.2s ease" }}>
-        {hover ? (anomalyDetected ? "date of flagged traffic anomaly" : "date of last baseline evaluation") : (anomalyDetected ? "Traffic exceeds expected baseline" : "Traffic within normal baseline range")}
-      </div>
-    </div>
-  );
-}
-
-function StatisticsTab({ data }) {
-  const isMobile = useIsMobile();
-  const visitsOverTime = data?.visitsOverTime || [];
-  const latestDay = visitsOverTime.length > 0 ? visitsOverTime[visitsOverTime.length - 1] : null;
-  const totalVisits = data?.totalVisits ?? 1;
-
-  const topReferrers = (data?.topReferrers || []).slice(0, 5);
-  const anomalyDays = getAnomalyAnalysis(visitsOverTime).filter(d => d.isAnomaly);
-  const latestAnomalyDate = anomalyDays.length > 0 ? anomalyDays[anomalyDays.length - 1].date : null;
-
-  return (
-    <div style={{ padding: isMobile ? "20px 12px 12px" : "28px 16px 12px", display: "flex", flexDirection: "column", gap: 36 }}>
-      {/* Top 3 Metric Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: isMobile ? 24 : 32, alignItems: "start" }}>
-        <StatCard
-          label="Total Visits"
-          value={data?.totalVisits ?? 0}
-          animate
-          subtitle="lifetime portfolio visits"
-        />
-
-        <StatCard
-          label="Latest Daily Visits"
-          value={latestDay ? latestDay.count : 0}
-          animate
-          subtitle={latestDay ? `recorded on ${formatChartDate(latestDay.date)}` : "no daily records"}
-        />
-
-        <AnomalyStatCard
-          anomalyDetected={data?.anomalyDetected}
-          latestAnomalyDate={latestAnomalyDate}
-          lastUpdated={data?.lastUpdated}
-        />
-      </div>
-
-      {/* Bottom Section: Top Referrers Progress List */}
-      <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-          <span style={{ fontFamily: bodyFont, fontSize: 15, fontWeight: 600, color: textMuted }}>
-            Top Traffic Referrers
-          </span>
-          <span style={{ fontFamily: bodyFont, fontSize: 13, fontWeight: 500, color: textMuted }}>
-            {topReferrers.length} active sources
-          </span>
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "16px 40px" }}>
-          {topReferrers.map((r) => {
-            const formattedName = formatReferrer(r.referrer);
-            const pct = Math.round((r.count / totalVisits) * 100);
-            return (
-              <div key={r.referrer} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontFamily: bodyFont, fontSize: 14, color: textPrimary }}>
-                  <span style={{ fontWeight: 600 }}>{formattedName}</span>
-                  <span style={{ color: textMuted, fontWeight: 500 }}>
-                    {r.count} visits <span style={{ fontSize: 12 }}>({pct}%)</span>
-                  </span>
-                </div>
-                <div style={{ height: 8, borderRadius: 4, background: "#f1efec" }}>
-                  <div style={{ height: "100%", width: `${pct}%`, borderRadius: 4, background: barFill, border: "1px solid #d8d4d0" }} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div style={{ marginTop: 16, fontFamily: bodyFont, fontSize: 13, color: textMuted, textAlign: "center" }}>
-        last updated: {formatDate(data?.lastUpdated)}
-      </div>
     </div>
   );
 }
@@ -328,7 +143,7 @@ function CustomChartTooltip({ active, payload }) {
       <div
         style={{
           backgroundColor: "#ffffff",
-          borderRadius: 6,
+          borderRadius: 0,
           border: `1px solid ${d.isAnomaly ? accent : "#e6e2df"}`,
           fontFamily: bodyFont,
           fontSize: "14px",
@@ -344,8 +159,8 @@ function CustomChartTooltip({ active, payload }) {
             {d.count} visits
           </span>
           {d.isAnomaly && (
-            <span style={{ background: "rgba(140,79,71,0.12)", color: accent, fontSize: 12, fontWeight: 700, padding: "2px 8px", borderRadius: 4 }}>
-              Anomaly
+            <span style={{ background: "rgba(0,0,0,0.08)", color: accent, fontSize: 12, fontWeight: 700, padding: "2px 8px", borderRadius: 0 }}>
+              Anomaly Spike
             </span>
           )}
         </div>
@@ -355,292 +170,179 @@ function CustomChartTooltip({ active, payload }) {
   return null;
 }
 
-const CAROUSEL_ITEMS = [
-  { key: "anomalies", label: "Anomalies" },
-  { key: "visits", label: "Visits Over Time" },
-  { key: "referrers", label: "Top Referrers" },
+// Approved referrers configuration
+const APPROVED_REFERRERS = [
+  { id: "www.micotazarte.dev", label: "www.micotazarte.dev" },
+  { id: "micotazarte.dev", label: "micotazarte.dev" },
+  { id: "cloudfront", label: "CloudFront Link" },
+  { id: "localhost", label: "localhost" },
 ];
 
-function normalizeAngle(deg) {
-  let a = deg % 360;
-  if (a > 180) a -= 360;
-  if (a < -180) a += 360;
-  return a;
+function getFilteredTopReferrers(rawReferrers = []) {
+  const categoryCounts = {
+    "www.micotazarte.dev": 0,
+    "micotazarte.dev": 0,
+    "cloudfront": 0,
+    "localhost": 0,
+  };
+
+  let cfHostnameFound = null;
+
+  rawReferrers.forEach((r) => {
+    const ref = (r.referrer || "").toLowerCase();
+    let hostname = ref;
+    try {
+      if (ref.startsWith("http://") || ref.startsWith("https://")) {
+        hostname = new URL(ref).hostname;
+      }
+    } catch {
+      hostname = ref.replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    }
+
+    if (hostname.includes("www.micotazarte.dev")) {
+      categoryCounts["www.micotazarte.dev"] += r.count || 0;
+    } else if (hostname.includes("micotazarte.dev")) {
+      categoryCounts["micotazarte.dev"] += r.count || 0;
+    } else if (hostname.includes("cloudfront")) {
+      categoryCounts["cloudfront"] += r.count || 0;
+      if (!cfHostnameFound && hostname) cfHostnameFound = hostname;
+    } else if (hostname.includes("localhost") || hostname.includes("127.0.0.1") || ref === "direct" || !ref) {
+      categoryCounts["localhost"] += r.count || 0;
+    }
+  });
+
+  return APPROVED_REFERRERS.map((item) => {
+    let displayLabel = item.label;
+    if (item.id === "cloudfront" && cfHostnameFound) {
+      displayLabel = cfHostnameFound;
+    }
+    return {
+      referrer: item.id,
+      label: displayLabel,
+      count: categoryCounts[item.id],
+    };
+  });
 }
 
-function IntuitiveCircularCarousel({ selectedIndex, onSelect }) {
+function SinglePageDashboard({ data }) {
   const isMobile = useIsMobile();
-  const radius = isMobile ? 110 : 230;
-  const [angle, setAngle] = useState(-selectedIndex * 120);
-  const dragging = useRef(false);
-  const startX = useRef(0);
-  const startAngle = useRef(0);
-
-  useEffect(() => {
-    setAngle(-selectedIndex * 120);
-  }, [selectedIndex]);
-
-  const settle = useCallback((finalAngle) => {
-    const nearestIndex = Math.round(-finalAngle / 120) % 3;
-    const normalizedIndex = ((nearestIndex % 3) + 3) % 3;
-    setAngle(-normalizedIndex * 120);
-    onSelect(normalizedIndex);
-  }, [onSelect]);
-
-  const onPointerDown = (e) => {
-    dragging.current = true;
-    startX.current = e.clientX;
-    startAngle.current = angle;
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-
-  const onPointerMove = (e) => {
-    if (!dragging.current) return;
-    const delta = (e.clientX - startX.current) * 0.22;
-    setAngle(startAngle.current + delta);
-  };
-
-  const onPointerUp = () => {
-    if (!dragging.current) return;
-    dragging.current = false;
-    settle(angle);
-  };
-
-  const rotateLeft = () => {
-    settle(angle + 120);
-  };
-
-  const rotateRight = () => {
-    settle(angle - 120);
-  };
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-      <div
-        style={{
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          maxWidth: isMobile ? "100%" : 620,
-          height: 80,
-          margin: "0 auto",
-        }}
-      >
-        <button
-          onClick={rotateLeft}
-          aria-label="Previous graph option"
-          style={{
-            position: "absolute",
-            left: isMobile ? 4 : 20,
-            zIndex: 110,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 36,
-            height: 36,
-            borderRadius: "50%",
-            background: "rgba(22, 18, 23, 0.08)",
-            border: "1px solid rgba(22, 18, 23, 0.12)",
-            color: textPrimary,
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-            backdropFilter: "blur(4px)",
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = textPrimary; e.currentTarget.style.color = "#ffffff"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(22, 18, 23, 0.08)"; e.currentTarget.style.color = textPrimary; }}
-        >
-          <ChevronLeft size={20} />
-        </button>
-
-        <div
-          onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); onPointerDown(e); }}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={onPointerUp}
-          style={{
-            position: "relative",
-            height: 76,
-            width: "100%",
-            touchAction: "none",
-            cursor: "grab",
-            userSelect: "none",
-            WebkitTapHighlightColor: "transparent",
-          }}
-        >
-          {CAROUSEL_ITEMS.map((item, i) => {
-            const raw = normalizeAngle(i * 120 + angle);
-            const rad = (raw * Math.PI) / 180;
-            const x = Math.sin(rad) * radius;
-            const depth = (Math.cos(rad) + 1) / 2; // 0..1, 1 = front-center
-            const scale = 0.7 + 0.43 * depth;
-            const opacity = 0.45 + 0.55 * depth;
-            const isFront = depth > 0.9;
-
-            return (
-              <button
-                key={item.key}
-                onClick={() => !dragging.current && settle(-i * 120)}
-                style={{
-                  position: "absolute",
-                  left: "50%",
-                  top: "50%",
-                  transform: `translate(-50%, -50%) translateX(${x}px) scale(${scale})`,
-                  transition: dragging.current ? "none" : "transform 0.55s cubic-bezier(.16,.84,.2,1), opacity 0.55s",
-                  opacity,
-                  zIndex: Math.round(depth * 100),
-                  fontFamily: bodyFont,
-                  fontWeight: isFront ? 600 : 500,
-                  fontSize: isFront ? (isMobile ? 16 : 19) : (isMobile ? 13 : 15),
-                  color: isFront ? textPrimary : textMuted,
-                  background: isFront ? "rgba(255, 255, 255, 0.75)" : "transparent",
-                  border: isFront ? "1px solid rgba(22, 18, 23, 0.14)" : "none",
-                  borderRadius: 9999,
-                  padding: isFront ? "6px 18px" : "4px 12px",
-                  boxShadow: isFront ? "0 4px 12px rgba(0,0,0,0.08)" : "none",
-                  whiteSpace: "nowrap",
-                  cursor: "pointer",
-                  touchAction: "none",
-                  pointerEvents: "none",
-                }}
-              >
-                {item.label}
-              </button>
-            );
-          })}
-        </div>
-
-        <button
-          onClick={rotateRight}
-          aria-label="Next graph option"
-          style={{
-            position: "absolute",
-            right: isMobile ? 4 : 20,
-            zIndex: 110,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 36,
-            height: 36,
-            borderRadius: "50%",
-            background: "rgba(22, 18, 23, 0.08)",
-            border: "1px solid rgba(22, 18, 23, 0.12)",
-            color: textPrimary,
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-            backdropFilter: "blur(4px)",
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = textPrimary; e.currentTarget.style.color = "#ffffff"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(22, 18, 23, 0.08)"; e.currentTarget.style.color = textPrimary; }}
-        >
-          <ChevronRight size={20} />
-        </button>
-      </div>
-
-      <div style={{ fontFamily: bodyFont, fontSize: 12, fontWeight: 500, color: textMuted, marginTop: 4, letterSpacing: "0.02em" }}>
-        click arrows or drag to rotate graphs
-      </div>
-    </div>
-  );
-}
-
-function GraphsTab({ data }) {
-  const isMobile = useIsMobile();
-  const [selected, setSelected] = useState(1); // default to 1: "Visits Over Time"
-  const activeKey = CAROUSEL_ITEMS[selected].key;
-
   const rawVisits = data?.visitsOverTime || [];
   const visitsOverTime = getAnomalyAnalysis(rawVisits).map((d) => ({
     ...d,
     displayDate: formatChartDate(d.date),
   }));
 
-  const topReferrers = data?.topReferrers || [];
-  const maxReferrerCount = topReferrers[0]?.count || 1;
-  const anomalyCount = visitsOverTime.filter((d) => d.isAnomaly).length;
+  const latestDay = visitsOverTime.length > 0 ? visitsOverTime[visitsOverTime.length - 1] : null;
+  const totalVisits = data?.totalVisits || 0;
+
+  const topReferrers = getFilteredTopReferrers(data?.topReferrers || []);
+  const maxReferrerCount = Math.max(...topReferrers.map((r) => r.count), 1);
 
   return (
-    <div style={{ padding: isMobile ? "16px 8px 8px" : "28px 16px 12px", display: "flex", flexDirection: "column", gap: 16 }}>
-      <div
-        style={{
-          height: isMobile ? "auto" : 340,
-          minHeight: isMobile ? 160 : undefined,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
-        }}
-      >
-        {activeKey === "visits" && (
-          <div style={{ width: "100%", height: isMobile ? 170 : 300 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={visitsOverTime} margin={{ top: 8, right: 4, left: 4, bottom: 0 }}>
-                <XAxis
-                  dataKey="displayDate"
-                  tick={{ fontFamily: bodyFont, fontSize: 13, fill: textMuted }}
-                  axisLine={{ stroke: "#e5e2df" }}
-                  tickLine={false}
-                />
-                <Tooltip content={<CustomChartTooltip />} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
-                <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                  {visitsOverTime.map((entry, i) => (
-                    <Cell key={i} fill={entry.isAnomaly ? accent : barFill} style={{ cursor: "pointer" }} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        )}
+    <div style={{ padding: isMobile ? "12px 4px" : "20px 8px", display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* Metric Cards Row */}
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 16 : 24, alignItems: "start" }}>
+        <div style={{ ...glassCardStyle, padding: isMobile ? "20px" : "24px 28px" }}>
+          <StatCard
+            label="Total Visits"
+            value={totalVisits}
+            animate
+            subtitle="lifetime portfolio visits"
+          />
+        </div>
 
-        {activeKey === "referrers" && (
-          <div style={{ width: "100%", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
-            {topReferrers.slice(0, 6).map((r) => {
-              const formattedName = formatReferrer(r.referrer);
-              return (
-                <div key={r.referrer}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontFamily: bodyFont, fontSize: 15, fontWeight: 600, color: textPrimary, marginBottom: 6 }}>
-                    <span>{formattedName}</span>
-                    <span style={{ color: textMuted, fontWeight: 500 }}>{r.count} visits</span>
-                  </div>
-                  <div style={{ height: 12, borderRadius: 4, background: "#f1efec" }}>
-                    <div style={{ height: "100%", width: `${(r.count / maxReferrerCount) * 100}%`, borderRadius: 4, background: barFill, border: "1px solid #d8d4d0" }} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {activeKey === "anomalies" && (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: isMobile ? 12 : 20, width: "100%", padding: isMobile ? "8px 0" : 0 }}>
-            <div style={{ display: "flex", gap: isMobile ? 8 : 14, flexWrap: "wrap", justifyContent: "center" }}>
-              {visitsOverTime.map((item, i) => (
-                <div
-                  key={i}
-                  title={`${formatDate(item.date).split(",")[0]}: ${item.count} visits ${item.isAnomaly ? "(Anomaly Spike)" : ""}`}
-                  style={{
-                    width: item.isAnomaly ? (isMobile ? 18 : 24) : (isMobile ? 14 : 18),
-                    height: item.isAnomaly ? (isMobile ? 18 : 24) : (isMobile ? 14 : 18),
-                    borderRadius: "50%",
-                    background: item.isAnomaly ? accent : "#e6e2df",
-                    cursor: "pointer",
-                    transition: "transform 0.2s ease, background-color 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.35)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
-                />
-              ))}
-            </div>
-
-            <div style={{ fontFamily: bodyFont, fontSize: isMobile ? 13 : 15, color: textMuted, textAlign: "center" }}>
-              {anomalyCount} anomaly day(s) detected across {visitsOverTime.length} days tracked
-            </div>
-          </div>
-        )}
+        <div style={{ ...glassCardStyle, padding: isMobile ? "20px" : "24px 28px" }}>
+          <StatCard
+            label="Latest Daily Visits"
+            value={latestDay ? latestDay.count : 0}
+            animate
+            subtitle={latestDay ? `recorded on ${formatChartDate(latestDay.date)}` : "no daily records"}
+          />
+        </div>
       </div>
 
-      <IntuitiveCircularCarousel selectedIndex={selected} onSelect={setSelected} />
+      {/* Main Graph: Visits Over Time in a glassy container card */}
+      <div style={{ ...glassCardStyle, padding: isMobile ? "20px 18px" : "26px 28px", display: "flex", flexDirection: "column", gap: 18 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8 }}>
+          <div>
+            <span style={{ fontFamily: displayFont, fontSize: 16, fontWeight: 700, color: textPrimary }}>
+              Visits Over Time
+            </span>
+            <div style={{ fontFamily: bodyFont, fontSize: 13, fontWeight: 500, color: textMuted, marginTop: 2 }}>
+              Daily traffic breakdown with anomaly spike detection
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 12, fontFamily: bodyFont, color: textMuted }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 10, height: 10, borderRadius: 0, background: barFill, display: "inline-block", border: "1px solid #d8d4d0" }} /> Normal
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 10, height: 10, borderRadius: 0, background: accent, display: "inline-block" }} /> Anomaly Spike
+            </span>
+          </div>
+        </div>
+
+        <div style={{ width: "100%", height: isMobile ? 220 : 310, marginTop: 6 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={visitsOverTime} margin={{ top: 12, right: 4, left: 4, bottom: 0 }}>
+              <XAxis
+                dataKey="displayDate"
+                tick={{ fontFamily: bodyFont, fontSize: 13, fill: textMuted }}
+                axisLine={{ stroke: "rgba(22, 18, 23, 0.12)" }}
+                tickLine={false}
+              />
+              <Tooltip content={<CustomChartTooltip />} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
+              <Bar dataKey="count" radius={[0, 0, 0, 0]}>
+                {visitsOverTime.map((entry, i) => (
+                  <Cell key={i} fill={entry.isAnomaly ? accent : barFill} style={{ cursor: "pointer" }} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Top Referrers Progress List in a glassy container card */}
+      <div style={{ ...glassCardStyle, padding: isMobile ? "20px 18px" : "26px 28px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+          <div>
+            <span style={{ fontFamily: displayFont, fontSize: 16, fontWeight: 700, color: textPrimary }}>
+              Top Traffic Referrers
+            </span>
+            <div style={{ fontFamily: bodyFont, fontSize: 13, fontWeight: 500, color: textMuted, marginTop: 2 }}>
+              Traffic breakdown across approved sources
+            </div>
+          </div>
+          <span style={{ fontFamily: bodyFont, fontSize: 13, fontWeight: 600, color: textMuted, background: "rgba(22, 18, 23, 0.05)", padding: "4px 10px", borderRadius: 0 }}>
+            {APPROVED_REFERRERS.length} sources
+          </span>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "20px 40px" }}>
+          {topReferrers.map((r) => {
+            const pct = totalVisits > 0 ? Math.round((r.count / totalVisits) * 100) : 0;
+            const barWidth = maxReferrerCount > 0 ? Math.round((r.count / maxReferrerCount) * 100) : 0;
+
+            return (
+              <div key={r.referrer} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontFamily: bodyFont, fontSize: 14, color: textPrimary }}>
+                  <span style={{ fontWeight: 600 }}>{r.label}</span>
+                  <span style={{ color: textMuted, fontWeight: 500 }}>
+                    {r.count} visits <span style={{ fontSize: 12 }}>({pct}%)</span>
+                  </span>
+                </div>
+                <div style={{ height: 8, borderRadius: 0, background: "rgba(22, 18, 23, 0.06)" }}>
+                  <div style={{ height: "100%", width: `${barWidth}%`, borderRadius: 0, background: barFill, border: "1px solid #d8d4d0", transition: "width 0.4s ease" }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 4, fontFamily: bodyFont, fontSize: 13, color: textMuted, textAlign: "center" }}>
+        last updated: {formatDate(data?.lastUpdated)}
+      </div>
     </div>
   );
 }
@@ -653,18 +355,16 @@ function DragHandle({ onPointerDown, onPointerMove, onPointerUp }) {
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       style={{
-        position: "absolute",
-        bottom: 16,
-        left: "50%",
-        transform: "translateX(-50%)",
-        color: textMuted,
-        cursor: "grab",
-        padding: "14px 44px",
-        touchAction: "none",
-        userSelect: "none",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        width: "100%",
+        padding: "16px 0 8px",
+        marginTop: 16,
+        color: textMuted,
+        cursor: "grab",
+        touchAction: "none",
+        userSelect: "none",
         WebkitTapHighlightColor: "transparent",
       }}
     >
@@ -673,15 +373,9 @@ function DragHandle({ onPointerDown, onPointerMove, onPointerUp }) {
   );
 }
 
-const MAIN_TAB_OPTIONS = [
-  { key: "statistics", label: "Statistics" },
-  { key: "graphs", label: "Graphs" },
-];
-
 function AdminPanel({ onClose }) {
   const isMobile = useIsMobile();
   const { adminPassword, initialData } = useAdmin();
-  const [tab, setTab] = useState("statistics");
   const [closing, setClosing] = useState(false);
 
   // Analytics API state
@@ -788,9 +482,9 @@ function AdminPanel({ onClose }) {
         inset: 0,
         overflowY: "auto",
         overflowX: "hidden",
-        background: "rgba(255,255,255,0.55)",
-        backdropFilter: "blur(10px) saturate(140%)",
-        WebkitBackdropFilter: "blur(8px) saturate(140%)",
+        background: "rgba(248, 246, 243, 0.65)",
+        backdropFilter: "blur(18px) saturate(140%)",
+        WebkitBackdropFilter: "blur(18px) saturate(140%)",
         transform: closing ? "translate3d(0, -100%, 0)" : "translate3d(0, 0px, 0)",
         transition: closing ? "transform 0.4s cubic-bezier(.4,0,.6,1)" : "none",
         animation: closing ? "none" : "slideDown 0.55s cubic-bezier(.2,.8,.3,1)",
@@ -804,18 +498,25 @@ function AdminPanel({ onClose }) {
           position: "absolute",
           top: 24,
           right: 28,
-          background: "none",
-          border: "none",
+          background: "rgba(255, 255, 255, 0.60)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255, 255, 255, 0.8)",
+          borderRadius: 0,
+          width: 40,
+          height: 40,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           cursor: "pointer",
           color: textMuted,
-          padding: 8,
           zIndex: 10,
+          boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
         }}
       >
-        <X size={24} />
+        <X size={20} />
       </button>
 
-      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", maxWidth: 1200, margin: "0 auto", padding: isMobile ? "48px 16px 72px" : "80px 48px 90px" }}>
+      <div style={{ minHeight: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", maxWidth: 1200, margin: "0 auto", padding: isMobile ? "36px 16px 24px" : "60px 48px 36px" }}>
         <div style={{ flex: 1 }}>
           {loading ? (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: "60px 0" }}>
@@ -836,7 +537,7 @@ function AdminPanel({ onClose }) {
                   alignItems: "center",
                   gap: 8,
                   padding: "10px 20px",
-                  borderRadius: 8,
+                  borderRadius: 0,
                   border: "none",
                   background: textPrimary,
                   color: "#fff",
@@ -849,29 +550,17 @@ function AdminPanel({ onClose }) {
                 <RefreshCw size={16} /> Retry
               </button>
             </div>
-          ) : tab === "statistics" ? (
-            <StatisticsTab data={data} />
           ) : (
-            <GraphsTab data={data} />
+            <SinglePageDashboard data={data} />
           )}
         </div>
 
-        {!loading && !error && (
-          <div style={{ padding: "28px 0 6px", flexShrink: 0 }}>
-            <SlidingCapsuleTabs
-              options={MAIN_TAB_OPTIONS}
-              activeKey={tab}
-              onSelect={setTab}
-            />
-          </div>
-        )}
+        <DragHandle
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+        />
       </div>
-
-      <DragHandle
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-      />
     </div>
   );
 }
@@ -950,14 +639,12 @@ function PasswordGate({ onSuccess, onCancel }) {
           padding: isMobile ? "28px 24px" : "32px 34px",
           width: isMobile ? "85vw" : 300,
           maxWidth: 340,
-          boxShadow: "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.8) inset",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.10)",
           display: "flex",
           flexDirection: "column",
           gap: 16,
         }}
       >
-        {/* Header: lock icon + title */}
-        {/* Header: lock icon + title */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{
             width: 36, height: 36,
@@ -972,10 +659,8 @@ function PasswordGate({ onSuccess, onCancel }) {
           </div>
         </div>
 
-        {/* Divider */}
         <div style={{ height: 1, background: "rgba(22,18,23,0.07)", margin: "0 -2px" }} />
 
-        {/* Password input */}
         <input
           ref={inputRef}
           type="password"
@@ -1000,14 +685,12 @@ function PasswordGate({ onSuccess, onCancel }) {
           }}
         />
 
-        {/* Error message */}
         {errorMsg && (
           <div style={{ fontFamily: bodyFont, fontSize: 12, color: accent, fontWeight: 600, marginTop: -8 }}>
             {errorMsg}
           </div>
         )}
 
-        {/* Buttons */}
         <div style={{ display: "flex", gap: 8 }}>
           <button
             type="button"
@@ -1085,4 +768,3 @@ export default function AdminAnalyticsPanel() {
     </>
   );
 }
-
